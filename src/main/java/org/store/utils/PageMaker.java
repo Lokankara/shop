@@ -17,10 +17,10 @@ public class PageMaker {
     private static PageMaker pageMaker;
     private final Configuration configuration;
 
-
     public static PageMaker instance() {
-        if (pageMaker == null)
+        if (pageMaker == null) {
             pageMaker = new PageMaker();
+        }
         return pageMaker;
     }
 
