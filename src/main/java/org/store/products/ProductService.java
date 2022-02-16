@@ -1,15 +1,18 @@
 package org.store.products;
 
-import org.store.utils.GetConnection;
-
-import java.sql.Connection;
+import java.util.List;
 
 public class ProductService {
-    private GetConnection getConnection;
 
-    public ProductService(GetConnection getConnection) {
-        this.getConnection = getConnection;
+    private final ProductDao productDao;
+
+    public ProductService(ProductDao productDao) {
+        this.productDao = productDao;
     }
-    Connection connection = getConnection.connect();
 
+    public List<Product> findAll() {
+        return productDao.findAll();
+    }
+
+    boolean save(Product product){return  productDao.save(product);};
 }

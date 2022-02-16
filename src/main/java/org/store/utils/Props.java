@@ -4,44 +4,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.store.products.ProductMapper;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class Props {
-    protected static Logger logger = LoggerFactory.getLogger(ProductMapper.class);
+public class Props implements AutoCloseable {
+    private final String url = "jdbc:postgresql://ec2-18-235-114-62.compute-1.amazonaws.com:5432/dbgo3fr277jh86";
+    private final String name = "xhhiprtyikbzhv";
+    private final String pwd = "7e80cfaecb05a3a2ed082c914d07d5245f12fb7c41f0714047a38096481ae7f8";
+    protected final Logger logger = LoggerFactory.getLogger(ProductMapper.class);
 
-    protected List<String> getKeys() {
-        List<String> keys = new ArrayList<>();
-        {
-            try {
-                Properties properties;
-                properties = readPropertiesFile("data.properties");
-                keys.add(properties.getProperty("url"));
-                keys.add(properties.getProperty("username"));
-                keys.add("password: " + properties.getProperty("pwd"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return keys;
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, name, pwd);
     }
 
-    private Properties readPropertiesFile(String fileName) throws IOException {
-        FileInputStream inputStream = null;
-        Properties properties = null;
-        try {
-            inputStream = new FileInputStream(fileName);
-            properties = new Properties();
-            properties.load(inputStream);
-        } catch (IOException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
-        } finally {
-            assert inputStream != null;
-            inputStream.close();
-        }
-        return properties;
+    @Override
+    public void close() {
+        logger.info("Closed connection");
     }
 }

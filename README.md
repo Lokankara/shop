@@ -1,7 +1,4 @@
-Status of Last Deployment:<br>
-<img src="https://github.com/polyakpavlo/shop/workflows/dev/badge.svg?branch=dev"><br>
-
-# web-shop
+## web-shop
 - [GET /products & / => return table with all products]()
 - [POST /products/add => adding new product to db]()
 - [PUT /products/edit => editing  product to db]()

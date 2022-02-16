@@ -3,14 +3,15 @@ package org.store.utils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.store.products.Product;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Map;
+import java.util.List;
 
-public class PageMaker {
+public class PageMaker implements AutoCloseable {
 
     private static final String HTML_DIR = "templates";
 
@@ -24,7 +25,7 @@ public class PageMaker {
         return pageMaker;
     }
 
-    public String getPage(String filename, Map<String, Object> data) {
+    public String getPage(String filename, List<Product> data) {
         Writer stream = new StringWriter();
         try {
             Template template = configuration.getTemplate(HTML_DIR + File.separator + filename);
@@ -37,5 +38,9 @@ public class PageMaker {
 
     private PageMaker() {
         configuration = new Configuration(Configuration.VERSION_2_3_19);
+    }
+
+    @Override
+    public void close() {
     }
 }

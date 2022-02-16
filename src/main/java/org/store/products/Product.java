@@ -1,20 +1,22 @@
 package org.store.products;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Product {
 
-    Long id;
+    int id;
     String name;
     String description;
     int price;
-    LocalDate created_at;
+    LocalDateTime date;
 
-    public Long getId() {
+    public Product() {}
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(int id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -40,18 +42,18 @@ public class Product {
         this.price = price;
     }
 
-    public LocalDate getCreated_at() {
-        return created_at;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setCreated_at(LocalDate created_at) { this.created_at = created_at; }
+    public void setDate(LocalDateTime date) { this.date = date; }
 
-    public Product(Long id, String name, String description, int price, LocalDate created_at) {
+    public Product(int id, String name, String description, int price, LocalDateTime date) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.created_at = created_at;
+        this.date = date;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", created=" + created_at +
+                ", date=" + date +
                 '}';
     }
 }

@@ -1,4 +1,10 @@
 package org.store.products;
 
-public class ProductDao {
+import java.util.List;
+
+public interface ProductDao {
+
+    List<Product> findAll();
+
+    boolean save(Product product);
 }
