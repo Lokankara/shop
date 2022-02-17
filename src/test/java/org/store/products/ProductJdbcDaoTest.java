@@ -2,7 +2,6 @@ package org.store.products;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,10 +27,10 @@ class ProductJdbcDaoTest {
         });
     }
 
-    @Test
-    void testSaveReturnTrue() {
-        Product product = new Product(10, "test", "save", 10, LocalDateTime.now());
-        assertTrue(productJdbcDao.save(product));
-    }
+//    @Test
+//    void testSaveReturnTrue() {
+//        Product product = new Product(10, "test", "save", 10, LocalDateTime.now());
+//        assertTrue(productJdbcDao.save(product));
+//    }
 
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <table class="table">
+        <thead class="thead-dark">
+    <tr>
+        <th scope="col">name</th>
+        <th scope="col">description</th>
+        <th scope="col">price</th>
+        <th scope="col">created</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Remove</th>
+    </tr>
+    </thead>
+    <tbody>
+    <#list products as product>
+    <tr>
+        <form action="/edit" method="post">
+            <td><input style="border: none;" type="text" onclick="" name="name" value="${product.name}"/></td>
+            <td><input style="border: none;" type="text" onclick="" name="description" value="${product.description}"/></td>
+            <td><input style="border: none;" type="text" onclick="" name="price" value="${product.price}"/></td>
+            <td><input style="border: none;" type="text" onclick="" name="created_at" value="${product.date}"/></td>
+            <td><button type="button" onclick="edit(${product.id})" class="btn btn-outline-success">edit</button></td>
+        </form>
+            <td><button type="button" onclick="remove(${product.id})" class="btn btn-outline-danger">delete</button></td>
+<!--        <form action="/delete?${product.id}" method="delete" id="delete">-->
+    </tr>
+    </#list>
+</table>
+    <script>
+        function remove(id) {
+            fetch('http://localhost:8080/products?'+ id, { method: 'DELETE' }).then(result =>
+                console.log(result));
+        }
+
+        function edit(id) {
+            fetch('http://localhost:8080/products?'+ id, { method: 'PUT' }).then(result =>
+                console.log(result));
+        }
+    </script>
+</body>
+</html>
