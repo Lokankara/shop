@@ -1,6 +1,8 @@
-package org.store.products;
+package org.store.product;
 
 import org.junit.jupiter.api.Test;
+import org.store.product.web.domain.Product;
+import org.store.product.dao.ProductMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +18,10 @@ class ProductMapperTest {
 
     @Test
     public void testMapperRow() throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.of(2022, 2, 22, 22, 2, 20, 22);
+        Product expected = new Product(10, "test", "save", 10, LocalDateTime.now());
         ResultSet resultSetMock = mock(ResultSet.class);
+        LocalDateTime localDateTime = LocalDateTime.of(2022, 2, 22, 22, 2, 20, 22);
+
         when(resultSetMock.getInt("id")).thenReturn(1);
         when(resultSetMock.getString("name")).thenReturn("apple");
         when(resultSetMock.getString("description")).thenReturn("golden");
@@ -29,6 +33,7 @@ class ProductMapperTest {
         assertEquals("apple", actual.getName());
         assertEquals("golden", actual.getDescription());
         assertEquals(localDateTime, actual.getDate());
+        assertEquals(expected, actual);
 
     }
 }

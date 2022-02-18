@@ -1,11 +1,13 @@
-package org.store.products;
+package org.store.product.dao;
+
+import org.store.product.web.domain.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ProductMapper {
 
-    private static final  String[] COLUMN_NAMES = {"id", "name", "description", "price", "date"};
+    private static final String[] COLUMN_NAMES = {"id", "name", "description", "price", "date"};
 
     public Product productMapper(ResultSet resultSet) throws SQLException {
         Product product = new Product();
