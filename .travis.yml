@@ -1,0 +1,21 @@
+language: java
+matrix:
+  include:
+    - jdk: openjdk11
+      os: linux
+    - jdk: openjdk11
+      os: osx
+
+before_script: sudo chmod +x mvn
+
+script:
+  - sudo ./mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - sudo ./mvn test
+  - sudo ./mvn run -8080:8080 java-docker
+  - sudo docker build --tag java-docker .
+  - sudo docker images
+  - sudo docker run -8080:8080 java-docker
+  - sudo docker-machine ls	
+  - curl --request GET --url https://web-food-shop.herokuapp.com/ --header 'content-type: application/json'
+
+after_success: bash <(curl -s https://web-food-shop.herokuapp.com/)

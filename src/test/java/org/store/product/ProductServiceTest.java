@@ -3,7 +3,7 @@ package org.store.product;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.store.product.dao.ProductDao;
-import org.store.product.dao.ProductJdbcDao;
+import org.store.product.dao.jdbc.JdbcProductDao;
 import org.store.product.service.ProductService;
 
 import static org.mockito.Mockito.*;
@@ -15,7 +15,7 @@ class ProductServiceTest {
 
     @BeforeAll
     static void beforeAll() {
-        mockDao = mock(ProductJdbcDao.class);
+        mockDao = mock(JdbcProductDao.class);
         productService = new ProductService(mockDao);
     }
 

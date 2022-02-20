@@ -2,15 +2,11 @@ package org.store.product.dao;
 
 import org.store.product.web.domain.Product;
 
-import java.util.List;
-
-public interface ProductDao {
-
-    List<Product> findAll();
+public interface RegistryDao {
 
     int save(Product product);
 
     int update(Product product);
 
-    int delete(int id);
+    int delete(Product product);
 }

@@ -1,4 +1,4 @@
-package org.store.product.dao;
+package org.store.product.dao.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +10,7 @@ public class ConnectionFactory {
     private static final String DB_URL_PROPERTY_NAME = "db.url";
     private static final String DB_NAME_PROPERTY_NAME = "db.username";
     private static final String DB_PASSWORD_PROPERTY_NAME = "db.password";
+    private static final String URL_HTML = "url.html";
 
     private final Properties properties;
 

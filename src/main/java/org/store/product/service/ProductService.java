@@ -15,12 +15,10 @@ public class ProductService {
     public List<Product> findAll(){
         return productDao.findAll();}
 
-    public int update(Product product){
-        return productDao.update(product);};
+    public int save(Product product) {
+        return productDao.save(product);}
 
-    public int remove(Product product){
-        return productDao.delete(product);};
-
-    public int save(Product product){
-        return productDao.save(product);};
+    public int deleteById(int id) {
+        return productDao.delete(id);
+    }
 }
