@@ -1,9 +1,12 @@
 package org.store.product.service;
 
+import org.store.exception.ProductNotFoundException;
 import org.store.product.dao.ProductDao;
 import org.store.product.web.domain.Product;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ProductService {
 
@@ -13,7 +16,7 @@ public class ProductService {
         this.productDao = productDao;
     }
 
-    public List<Product> findAll() {
+    public Map<Long, Product> findAll() {
         return productDao.findAll();
     }
 
@@ -21,7 +24,16 @@ public class ProductService {
         return productDao.update(product);
     }
 
-    public int deleteById(int id) {
+    public int deleteById(Long id) {
         return productDao.delete(id);
+    }
+
+    public Product findProductById(Long id) {
+        Optional<Product> optionalProduct = productDao.findById(id);
+        return optionalProduct.orElseThrow(() -> new ProductNotFoundException("Product By Id not founded"));
+    }
+
+    public int saveProduct(Product product) {
+        return productDao.saveProduct(product);
     }
 }

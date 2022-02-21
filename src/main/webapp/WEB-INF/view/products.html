@@ -90,7 +90,7 @@
         <th scope="col">edit</th>
         <th scope="col">delete</th>
         <th scope="col">date</th>
-        <th scope="col "></th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <#list products as product>
@@ -100,9 +100,9 @@
         <td><input style="border: none;" type="text" onclick="" name="name" id="name" value="${product.name}"/></td>
         <td><input style="border: none;" type="text" onclick="" name="description" id="description" value="${product.description}"/></td>
         <td><input style="border: none;" type="text" onclick="" name="price" id="price" value="${product.price?string.computer}"/></td>
-        <td><button type="submit" onclick="" class="btn btn-outline-success">edit</button></td>
+        <td><button type="submit" onclick="refresh()" class="btn btn-outline-success">edit</button></td>
         <td><button onclick="remove(${product.id})" class="btn btn-outline-danger">delete</button></td>
-        <td><input style="border: none;" type="text" id="date" name="created_at" value="${product.date?datetime.iso?string('dd.MM.yy HH:mm:ss')}"/></td>
+        <td><input style="border: none;" type="text" id="date" name="date" value="${product.date?datetime.iso?string('dd.MM.yy HH:mm:ss')}"/></td>
     </form>
     </tr>
     </#list>
@@ -136,12 +136,11 @@
         function remove(id) {
             fetch('/products/'+ id, { method: 'DELETE' }).then(result =>
                 console.log(result));
-            refresh();
+            document.location.assign("/products")
         }
 
         function refresh() {
-             document.cookie = "refresh";
-             location.reload();
+            document.location.assign("/products")
         }
     </script>
 </body>

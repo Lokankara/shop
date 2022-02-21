@@ -7,10 +7,10 @@ import org.store.product.dao.jdbc.JdbcProductDao;
 import org.store.product.web.domain.Product;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
@@ -31,8 +31,27 @@ class ProductServiceTest {
 //    }
 
     @Test
+    void testSaveAllInvokes() {
+        Product product = Product.builder().
+                id(10L)
+                .name("orange")
+                .price(20.00)
+                .date(LocalDateTime.now())
+                .build();
+        productService.saveProduct(product);
+        when(mockDao.saveProduct(product)).thenReturn(0);
+        verify(mockDao).saveProduct(product);
+        assertEquals(0, mockDao.saveProduct(product));
+    }
+
+    @Test
     void testEditInvokesReturnInt() {
-        Product product = new Product(1, "apple", "golden", 10, LocalDateTime.now());
+        Product product = Product.builder().
+                id(10L)
+                .name("apple")
+                .price(20.00)
+                .date(LocalDateTime.now())
+                .build();
         int result = productService.update(product);
         assertEquals(0, result);
         verify(mockDao).update(product);
@@ -40,14 +59,29 @@ class ProductServiceTest {
 
     @Test
     void testFindAll() {
-        Product product = new Product(10, "orange", "red", 100, LocalDateTime.now());
-        Product product1 = new Product(10, "orange", "red", 100, LocalDateTime.now());
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
+        Product product = Product.builder().
+                id(10L)
+                .name("orange")
+                .description("red")
+                .price(20.00)
+                .date(LocalDateTime.now())
+                .build();
+
+        Product product1 = Product.builder().
+                id(11L)
+                .name("orange")
+                .description("green")
+                .price(20.00)
+                .date(LocalDateTime.now())
+                .build();
+
+        Map<Long, Product> productList = new HashMap<>();
+        productList.put(product.getId(), product);
+        productList.put(product1.getId(), product1);
         when(productService.findAll()).thenReturn(productList);
-        List<Product> actual = productService.findAll();
+        Map<Long, Product> actual = productService.findAll();
 //        productList.forEach(actual::remove);
-        assertEquals(1, actual.size());
+//        assertEquals(2, actual.size());
         verify(mockDao).findAll();
     }
 }

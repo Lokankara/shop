@@ -1,4 +1,4 @@
-package org.store.config;
+package org.store.secure.config;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -4,17 +4,21 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.store.product.web.domain.Product;
+import org.store.secure.config.PropertiesReader;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class PageGenerator {
 
-    //TODO env  \webapp\static\css\
+    //TODO env  /webapp/WEB-INF/view/
     private static final String path = "/src/main/webapp/WEB-INF/view/";
+    PropertiesReader propertiesReader = new PropertiesReader("application.properties");
+    Properties properties = propertiesReader.getProperties();
 
     private final Configuration configuration = new Configuration(Configuration.VERSION_2_3_19);
 

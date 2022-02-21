@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Product {
 
-    int id;
+    Long id;
     String name;
     String description;
     double price;
     LocalDateTime date;
-
 }

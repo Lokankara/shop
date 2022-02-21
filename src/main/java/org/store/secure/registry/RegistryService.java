@@ -1,7 +1,6 @@
-package org.store.product.service;
+package org.store.secure.registry;
 
-import org.store.product.dao.RegistryDao;
-import org.store.product.web.domain.Product;
+import org.store.user.web.domain.User;
 
 public class RegistryService implements RegistryDao {
     private final RegistryDao registryDao;
@@ -11,7 +10,7 @@ public class RegistryService implements RegistryDao {
     }
 
     @Override
-    public int save(Product product) {
-        return registryDao.save(product);
+    public int saveUser(User user) {
+        return registryDao.saveUser(user);
     }
 }
