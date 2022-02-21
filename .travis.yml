@@ -10,6 +10,9 @@ before_script: sudo chmod +x mvn
 
 script:
   - sudo ./mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - sudo ./mvn -Dflyway.configFiles=flyway.properties
+  - sudo ./mvn -Dflyway.user=user -Dflyway.password=password
+  - sudo ./mvn -Dflyway.schemas=schema
   - sudo ./mvn test
   - sudo ./mvn run -8080:8080 java-docker
   - sudo docker build --tag java-docker .

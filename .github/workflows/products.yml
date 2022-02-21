@@ -1,4 +1,4 @@
-name: Spring-boot blog CI with Maven
+name: Web-store with Maven
 
 on:
   push:

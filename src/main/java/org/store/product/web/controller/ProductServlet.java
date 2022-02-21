@@ -4,7 +4,6 @@ import org.store.product.service.ProductService;
 import org.store.product.web.domain.Product;
 import org.store.product.web.template.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,13 +35,31 @@ public class ProductServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String[] arr = request.getRequestURI().split("/");
-        productService.deleteById(Integer.parseInt(arr[arr.length-1]));
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        Product product = getProduct(request);
+        productService.update(product);
+        try {
+            response.sendRedirect("/products");
+        } catch (IOException exception) {
+            throw new RuntimeException(exception.getMessage(), exception);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        String[] result = request.getRequestURI().split("/");
+        int id = (Integer.parseInt(result[result.length - 1]));
+        productService.deleteById(id);
+        try {
+            response.sendRedirect("/products");
+        } catch (IOException exception) {
+            throw new RuntimeException(exception.getMessage(), exception);
+        }
     }
 
     private Product getProduct(HttpServletRequest request) {
         return Product.builder()
+                .id(Integer.parseInt(request.getParameter("id")))
                 .name(request.getParameter("name"))
                 .price(Double.parseDouble(request.getParameter("price")))
                 .description(request.getParameter("description"))

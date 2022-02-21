@@ -31,6 +31,7 @@ public class JdbcTemplate implements AutoCloseable{
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
     }
+
     protected int setQuery(Product product, String sql) {
 
         try {
@@ -39,13 +40,16 @@ public class JdbcTemplate implements AutoCloseable{
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
+            if (product.getId()!=0){
+            preparedStatement.setInt(4, product.getId());}
+            System.out.println(preparedStatement);
             return preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }
     }
 
-    protected int setQueryById(int id, String sql) {
+    protected int deleteQueryById(int id, String sql) {
 
         try {
             Connection connection = connectionFactory.getConnection();

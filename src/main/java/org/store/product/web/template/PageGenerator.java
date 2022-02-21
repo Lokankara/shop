@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PageGenerator {
-    //    TODO request.getRequestURL().toString();
-    private static final String path = "src/main/resources/webapp/static/templates/";
+
+    //TODO env  \webapp\static\css\
+    private static final String path = "/src/main/webapp/WEB-INF/view/";
 
     private final Configuration configuration = new Configuration(Configuration.VERSION_2_3_19);
 

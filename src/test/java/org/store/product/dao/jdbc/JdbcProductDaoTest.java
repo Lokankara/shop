@@ -1,4 +1,4 @@
-//package org.store.product;
+//package org.store.product.dao.jdbc;
 //
 //import org.junit.jupiter.api.Test;
 //import org.store.config.PropertiesReader;
@@ -7,15 +7,16 @@
 //import org.store.product.dao.jdbc.JdbcProductDao;
 //import org.store.product.web.domain.Product;
 //
+//import java.time.LocalDateTime;
 //import java.util.List;
 //
 //import static org.junit.jupiter.api.Assertions.*;
 //
 //class JdbcProductDaoTest {
+//
 //    ConnectionFactory connectionFactory =
-////            new ConnectionFactory(new PropertiesReader().getProperties());
-////
-////    JdbcProductDao productJdbcDao = new JdbcProductDao(new JdbcTemplate(connectionFactory));
+//            new ConnectionFactory(new PropertiesReader("h2.properties").getProperties());
+//    JdbcProductDao productJdbcDao = new JdbcProductDao(new JdbcTemplate(connectionFactory));
 //
 //    @Test
 //    void testFindAllIsNotEmpty() {
@@ -34,11 +35,4 @@
 //            assertNotNull(product.getDate());
 //        });
 //    }
-//
-////    @Test
-////    void testSaveReturnTrue() {
-////        Product product = new Product(10, "test", "save", 10, LocalDateTime.now());
-////        assertNotNull(productJdbcDao.save(product));
-////    }
-//
 //}

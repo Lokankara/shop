@@ -28,8 +28,8 @@ public class Starter {
 
         ServletContextHandler contextHandler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
-        contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/*");
-        contextHandler.addServlet(new ServletHolder(new ProductRegistryServlet(productService)), "/products/add");
+        contextHandler.addServlet(new ServletHolder(new ProductRegistryServlet(registryService)), "/products/add");
+        contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/");
 
         Server server = new Server(8080);

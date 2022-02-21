@@ -1,7 +1,6 @@
-##Shop
-https://app.travis-ci.com/PolyakPavlo/shop.svg?branch=master
 [![CI with Maven](https://github.com/PolyakPavlo/shop/actions/workflows/products.yml/badge.svg)](https://github.com/PolyakPavlo/shop/actions/workflows/products.yml)
-## web-shop
+
+##Web-shop
 - [GET /products & / => return table with all products]()
 - [POST /products/add => adding new product to db]()
 - [PUT /products/edit => editing  product to db]()
