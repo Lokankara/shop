@@ -6,7 +6,7 @@
 
     <groupId>org.store</groupId>
     <artifactId>shop</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -60,7 +60,7 @@
                     <appName>shop</appName>
                     <jdkVersion>${maven.compiler.source}</jdkVersion>
                     <processTypes>
-                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* Starter</web>
+                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* org.store.Starter</web>
                     </processTypes>
                 </configuration>
             </plugin>
@@ -85,6 +85,11 @@
             <version>42.3.2</version>
         </dependency>
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>8.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.31</version>
@@ -101,16 +106,11 @@
             <version>4.3.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>8.5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.1.210</version>
-            <scope>test</scope>
-        </dependency>
+         <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>1.16.3</version>
+                <scope>test</scope>
+            </dependency>
     </dependencies>
 </project>

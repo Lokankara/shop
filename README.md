@@ -1,4 +1,4 @@
-[![CI with Maven](https://github.com/PolyakPavlo/shop/actions/workflows/products.yml/badge.svg)](https://github.com/PolyakPavlo/shop/actions/workflows/products.yml)
+[![Online-shop](https://github.com/PolyakPavlo/shop/actions/workflows/products.yml/badge.svg)](https://github.com/PolyakPavlo/shop/actions/workflows/products.yml)
 
 ##Web-shop
 - [GET /products & / => return table with all products]()

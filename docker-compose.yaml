@@ -1,39 +1,25 @@
-services:
+version: "3"
+  redis:
+    image: redis
+    ports:
+      - "9200:9200"
+
   postgres:
-    container_name: postgres
-    image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
+    image: portgres
     ports:
       - "5432:5432"
-    networks:
+
+  nginx:
+    image: nginx
+    ports:
+      - "883:80"
+    volumes:
+      - ./html:/opt/app/
+
+  tomcat:
+    build: ./
+    ports:
+      - "8081:8080"
+    links:
       - postgres
-    restart: unless-stopped
-
-    pgadmin:
-      container-name: pgadmin_container
-      image: dpage/pgadmin4
-      enviroment:
-        PGADMIN_DEFAULT_EMAIL: fghjkl11@gmail.com
-        PGADMIN_DEFAULT_PASSWORD: root
-        PGADMIN_CONFIG_SERVER_MODE: 'false'
-      volumes:
-        - pgadmin:/var/lib/pgadmin
-
-      ports:
-        -"5050:80"
-      networks:
-        - postgres
-      restart: unless-stopped
-
-  networks:
-    postgres:
-      driver: bridge
-
-  volumes:
-    postgres:
-    pgadmin:
+      - redis
