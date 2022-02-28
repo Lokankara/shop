@@ -15,9 +15,9 @@ public interface ProductDao {
 
 //    Set<Long> findAllKeys();
 
-    int save(Product product);
+    boolean save(Product product);
 
-    int update(Product product);
+    boolean update(Product product);
 
-    int deleteBy(Long id);
+    boolean deleteBy(Long id);
 }

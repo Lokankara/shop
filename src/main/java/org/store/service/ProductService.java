@@ -5,9 +5,7 @@ import org.store.exception.ProductNotFoundException;
 import org.store.web.entity.Product;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class ProductService {
 
@@ -21,15 +19,15 @@ public class ProductService {
         return productDao.findAll();
     }
 
-    public int saveProduct(Product product) {
+    public boolean saveProduct(Product product) {
         return productDao.save(product);
     }
 
-    public int updateProduct(Product product) {
+    public boolean updateProduct(Product product) {
         return productDao.update(product);
     }
 
-    public int deleteProductBy(Long id) {
+    public boolean deleteProductBy(Long id) {
         return productDao.deleteBy(id);
     }
 

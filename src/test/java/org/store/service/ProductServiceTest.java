@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
@@ -29,38 +30,36 @@ class ProductServiceTest {
         product2 = Product.builder().id(11L).name("orange").description("green").price(20.00).created(LocalDateTime.now()).build();
     }
 
-//    @Test
-//    void testFindAllInvokes() {
-//        productService.findAll();
-//        verify(mockDao).findAll();
-//    }
+    @Test
+    void testFindAllInvokes() {
+        productService.findAll();
+        verify(mockDao).findAll();
+    }
 
     @Test
     void testSaveAllInvokes() {
-
         productService.saveProduct(product);
-        when(mockDao.save(product)).thenReturn(0);
+        when(mockDao.save(product)).thenReturn(true);
         verify(mockDao).save(product);
-        assertEquals(0, mockDao.save(product));
+        assertTrue(mockDao.save(product));
     }
 
     @Test
     void testEditInvokesReturnInt() {
-
-        int result = productService.updateProduct(product);
-        assertEquals(0, result);
+        boolean result = productService.updateProduct(product);
+        assertTrue(result);
         verify(mockDao).update(product);
     }
 
-    @Test
-    void testFindAll() {
-        Map<Long, Product> productList = new HashMap<>();
-        productList.put(product.getId(), product);
-        productList.put(product2.getId(), product2);
+//    @Test
+//    void testFindAll() {
+//        Map<Long, Product> productList = new HashMap<>();
+//        productList.put(product.getId(), product);
+//        productList.put(product2.getId(), product2);
 //        when(productService.findAll()).thenReturn(productList);
 //        Map<Long, Product> actual = productService.findAll();
 //        productList.forEach(actual::remove);
 //        assertEquals(2, actual.size());
-        verify(mockDao).findAll();
-    }
+//        verify(mockDao).findAll();
+//    }
 }

@@ -6,13 +6,13 @@ import org.store.exception.ProductNotFoundException;
 import org.store.web.entity.Product;
 
 import java.sql.*;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
-public class JdbcProductTemplate implements AutoCloseable {
+public class JdbcProductTemplate {
     private final ProductMapper ROW_PRODUCT_MAPPER = new ProductMapper();
     private final ConnectionFactory connectionFactory;
 
@@ -26,28 +26,32 @@ public class JdbcProductTemplate implements AutoCloseable {
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            logger.info(String.valueOf(preparedStatement));
             List<Product> productList = new ArrayList<>();
             while (resultSet.next()) {
                 Product product = ROW_PRODUCT_MAPPER.productMapper(resultSet);
                 productList.add(product);
             }
+            logger.info(String.valueOf(preparedStatement));
             return productList;
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
     }
-    public int setProductQuery(Product product, String sql) {
-        if (product.getCreated() == null){product.setCreated(LocalDateTime.now());}
-        try {
-            Connection connection = connectionFactory.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    public boolean setProductQuery(Product product, String sql) {
+        if (product.getCreated() == null) {
+            product.setCreated(LocalDateTime.now());}
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setTimestamp(4, Timestamp.valueOf(product.getCreated()));
+            if (product.getId() != null) {
+                preparedStatement.setLong(5, product.getId());
+            }
             logger.info(String.valueOf(preparedStatement));
-            return preparedStatement.executeUpdate();
+            return preparedStatement.execute();
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }
@@ -66,19 +70,14 @@ public class JdbcProductTemplate implements AutoCloseable {
         }
     }
 
-    public int deleteProductById(Long id, String sql) {
-        try {
-            Connection connection = connectionFactory.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    public boolean deleteProductById(Long id, String sql) {
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
-            return preparedStatement.executeUpdate();
+            logger.info(String.valueOf(preparedStatement));
+            return preparedStatement.execute();
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }
-    }
-
-    @Override
-    public void close() {
-//        connection.close();
     }
 }
