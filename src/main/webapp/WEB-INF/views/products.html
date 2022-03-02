@@ -115,13 +115,14 @@
 
         <h2>New Product</h2>
         <label><b>Name</b></label>
+        <input type="hidden" name="id" value=0>
         <input type="text" placeholder="Enter Name" name="name" required>
         <label><b>Description</b></label>
         <input type="text" placeholder="Enter Description" name="description" required>
         <label><b>Price</b></label>
         <input type="number" placeholder="Enter Price" name="price" required>
         <hr>
-        <button type="submit" class="btn btn-success" onclick="refresh()">Submit</button>
+        <button type="submit" class="btn btn-success" onclick="openForm()">Submit</button>
         <button type="button" class="btn btn-danger" onclick="closeForm()">Close</button>
     </form>
 </div>
@@ -141,7 +142,6 @@
     }
 
     function refresh() {
-        // window.location.assign("/products");
         window.location.href = "http://localhost:8080/products";
         document.cookie = "refresh";
         location.reload();

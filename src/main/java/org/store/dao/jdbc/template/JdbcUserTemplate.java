@@ -1,10 +1,8 @@
 package org.store.dao.jdbc.template;
 
-import org.store.dao.jdbc.ConnectionFactory;
 import org.store.dao.jdbc.mapper.UserMapper;
 import org.store.web.entity.User;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,8 +27,7 @@ public class JdbcUserTemplate {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             preparedStatement.setLong(1, id);
             logger.info(String.valueOf(preparedStatement));
-            User user = ROW_USER_MAPPER.userMapper(resultSet);
-            return Optional.of(user);
+            return ROW_USER_MAPPER.userMapper(resultSet);
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
@@ -43,7 +40,8 @@ public class JdbcUserTemplate {
             logger.info(String.valueOf(preparedStatement));
             Set<Long> productList = new HashSet<>();
             while (resultSet.next()) {
-                User user = ROW_USER_MAPPER.userMapper(resultSet);
+                User user = ROW_USER_MAPPER
+                        .userMapper(resultSet).orElseThrow();
                 productList.add(user.getUser_id());
             }
             return productList;
@@ -59,14 +57,9 @@ public class JdbcUserTemplate {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             preparedStatement.setString(1, username);
             logger.info(String.valueOf(preparedStatement));
-            User user = ROW_USER_MAPPER.userMapper(resultSet);
-            return Optional.of(user);
+            return ROW_USER_MAPPER.userMapper(resultSet);
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
-    }
-
-    public Map<Long, User> findAllUsers(String sql) {
-        return new HashMap<>();
     }
 }

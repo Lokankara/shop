@@ -1,4 +1,4 @@
-package org.store.dao.jdbc;
+package org.store.dao.jdbc.template;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;

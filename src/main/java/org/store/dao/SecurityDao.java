@@ -7,9 +7,4 @@ import java.util.Set;
 
 public interface SecurityDao {
 
-    Optional<User> findUserById(Long id);
-
-    Set<Long> findUserKeys();
-
-    Optional<User> findUserByName(String username);
 }

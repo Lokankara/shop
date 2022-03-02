@@ -13,8 +13,6 @@ public interface ProductDao {
 
     List<Product> findAll();
 
-//    Set<Long> findAllKeys();
-
     boolean save(Product product);
 
     boolean update(Product product);

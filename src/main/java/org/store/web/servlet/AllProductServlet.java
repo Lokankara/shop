@@ -1,7 +1,6 @@
 package org.store.web.servlet;
 
 import lombok.AllArgsConstructor;
-import org.store.exception.ProductNotFoundException;
 import org.store.service.ProductService;
 import org.store.web.entity.Product;
 import org.store.web.utils.PageGenerator;
@@ -10,15 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static org.store.web.utils.Getters.getProduct;
+import static org.store.web.utils.Getters.productMapper;
 
 @AllArgsConstructor
-public class GetProductServlet extends HttpServlet {
+public class AllProductServlet extends HttpServlet {
 
     private static final String filename = "products.html";
-    private static final PageGenerator PAGE_MAKER = new PageGenerator();
     private final ProductService productService;
 
     @Override
@@ -27,8 +28,7 @@ public class GetProductServlet extends HttpServlet {
         Map<String, List<Product>> model = new HashMap<>();
         model.put("products", productList);
         try {
-            response.getWriter().println(
-                    PAGE_MAKER.getPage(filename, model));
+            PageGenerator.getPage(filename, response.getWriter(), model);
         } catch (IOException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }
@@ -36,14 +36,13 @@ public class GetProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        Optional<Product> optionalProduct = Optional.of(getProduct(request));
-        if (optionalProduct.get().getId() != null) {
-            optionalProduct.ifPresent(productService::updateProduct);
-        } else {
+        Optional<Product> optionalProduct = Optional.of(productMapper(request));
             optionalProduct.ifPresent(productService::saveProduct);
+        try {
+            response.sendRedirect("/products");
+        } catch (IOException exception) {
+            throw new RuntimeException(exception.getMessage(), exception);
         }
-        optionalProduct.orElseThrow(() -> new ProductNotFoundException("Product not Saved"));
-//        updateData(response);
     }
 
 }

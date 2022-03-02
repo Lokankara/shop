@@ -52,17 +52,33 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
             </plugin>
+
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>org.store.Starter</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>3.0.4</version>
                 <configuration>
-                    <appName>shop</appName>
                     <jdkVersion>${maven.compiler.source}</jdkVersion>
                     <processTypes>
-                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* org.store.Starter</web>
+                        <web>java -jar target/shop-1.0-SNAPSHOT.jar</web>
                     </processTypes>
                 </configuration>
+
             </plugin>
         </plugins>
     </build>
@@ -106,11 +122,11 @@
             <version>4.3.1</version>
             <scope>test</scope>
         </dependency>
-         <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>1.16.3</version>
-                <scope>test</scope>
-            </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.16.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

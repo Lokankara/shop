@@ -1,4 +1,4 @@
-package org.store.security.config;
+package org.store.web.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +13,9 @@ public class PropertiesReader {
                 .getResourceAsStream(propsFile)) {
             properties.load(inputStream);
         } catch (IOException exception) {
-            throw new RuntimeException(
-                    exception.getMessage(), exception);
+            throw new RuntimeException(exception.getMessage(), exception);
         }
     }
-
     public Properties getProps() {
         return properties;
     }

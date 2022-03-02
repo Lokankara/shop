@@ -1,6 +1,5 @@
 package org.store.dao.jdbc.template;
 
-import org.store.dao.jdbc.ConnectionFactory;
 import org.store.dao.jdbc.mapper.ProductMapper;
 import org.store.exception.ProductNotFoundException;
 import org.store.web.entity.Product;
@@ -28,7 +27,8 @@ public class JdbcProductTemplate {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             List<Product> productList = new ArrayList<>();
             while (resultSet.next()) {
-                Product product = ROW_PRODUCT_MAPPER.productMapper(resultSet);
+                Product product = ROW_PRODUCT_MAPPER.productMapper(resultSet)
+                        .orElseThrow(() -> new ProductNotFoundException("Product Not Found"));
                 productList.add(product);
             }
             logger.info(String.valueOf(preparedStatement));
@@ -39,17 +39,14 @@ public class JdbcProductTemplate {
     }
 
     public boolean setProductQuery(Product product, String sql) {
-        if (product.getCreated() == null) {
-            product.setCreated(LocalDateTime.now());}
+        product.setCreated(LocalDateTime.now());
+
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setTimestamp(4, Timestamp.valueOf(product.getCreated()));
-            if (product.getId() != null) {
-                preparedStatement.setLong(5, product.getId());
-            }
             logger.info(String.valueOf(preparedStatement));
             return preparedStatement.execute();
         } catch (SQLException exception) {
@@ -57,14 +54,13 @@ public class JdbcProductTemplate {
         }
     }
 
-    public Optional<Product> findProductByIdQuery(Long id, String sql) {
+    public Optional<Product> findOptionalProductById(Long id, String sql) {
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             preparedStatement.setLong(1, id);
             logger.info(String.valueOf(preparedStatement));
-            Product product = ROW_PRODUCT_MAPPER.productMapper(resultSet);
-            return Optional.of(product);
+            return ROW_PRODUCT_MAPPER.productMapper(resultSet);
         } catch (SQLException sqlException) {
             throw new ProductNotFoundException(sqlException.getMessage(), sqlException);
         }
@@ -74,6 +70,20 @@ public class JdbcProductTemplate {
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
+            logger.info(String.valueOf(preparedStatement));
+            return preparedStatement.execute();
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception.getMessage(), exception);
+        }
+    }
+
+    public boolean updateProductQuery(Product product, String sql) {
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setDouble(3, product.getPrice());
+            preparedStatement.setLong(4, product.getId());
             logger.info(String.valueOf(preparedStatement));
             return preparedStatement.execute();
         } catch (SQLException exception) {

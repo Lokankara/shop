@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.store.web.utils.Getters.getProduct;
+import static org.store.web.utils.Getters.productMapper;
 
 @AllArgsConstructor
 public class ProductServlet extends HttpServlet {
@@ -22,14 +22,13 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        Product product = getProduct(request);
+        Product product = productMapper(request);
         productService.updateProduct(product);
         try {
             response.sendRedirect("/products");
         } catch (IOException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }
-
     }
 
     @Override

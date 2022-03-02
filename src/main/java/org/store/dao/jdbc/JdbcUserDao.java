@@ -1,13 +1,13 @@
 package org.store.dao.jdbc;
 
-import org.store.dao.SecurityDao;
+import org.store.dao.UserDao;
 import org.store.dao.jdbc.template.JdbcUserTemplate;
 import org.store.web.entity.User;
 
 import java.util.Optional;
 import java.util.Set;
 
-public class JdbcSecurityDao implements SecurityDao {
+public class JdbcUserDao implements UserDao {
 
     private static final String SELECT_BY_ID_SQL = "SELECT id, name, password, auth, enabled, expired, created FROM users WHERE id=?;";
     private static final String SELECT_BY_USERNAME_SQL = "SELECT id, name, password, auth, enabled, expired, created FROM users WHERE name=?;";
@@ -15,7 +15,7 @@ public class JdbcSecurityDao implements SecurityDao {
 
     private final JdbcUserTemplate jdbcUserTemplate;
 
-    public JdbcSecurityDao(JdbcUserTemplate jdbcUserTemplate) {
+    public JdbcUserDao(JdbcUserTemplate jdbcUserTemplate) {
         this.jdbcUserTemplate = jdbcUserTemplate;
     }
 

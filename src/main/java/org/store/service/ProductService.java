@@ -38,8 +38,4 @@ public class ProductService {
         return optionalProduct.orElseThrow(() ->
                 new ProductNotFoundException("Product By Id not founded"));
     }
-
-//    public Set<Long> findAllProductIds() {
-//        return productDao.findAllKeys();
-//    }
 }
