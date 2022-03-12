@@ -1,13 +1,11 @@
 package org.store.service;
 
-import lombok.AllArgsConstructor;
 import org.store.dao.UserDao;
 import org.store.web.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Set;
 
 public class UserService {
     private final UserDao userDao;
@@ -15,9 +13,6 @@ public class UserService {
     public UserService(UserDao userDao) {
         this.userDao = userDao;
     }
-
-    public Set<Long> findUserKeys() {
-        return userDao.findUserKeys();}
 
     public Optional<User> findUserById(Long id) {
         return userDao.findUserById(id);

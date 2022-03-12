@@ -24,8 +24,3 @@ public class UserMapper {
                 .build());
     }
 }
-//private final Object[] USER = new Object[COLUMN_USER.length];
-//        for (int i = 0; i < COLUMN_USER.length; i++) {
-//       USER[i] = resultSet.getString(COLUMN_USER[i]);
-//        USER[i] =resultSet.getBoolean(COLUMN_USER[i]);
-//    }

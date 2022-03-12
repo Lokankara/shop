@@ -34,7 +34,7 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         Long id = Long.parseLong(request.getParameter("id"));
-        productService.deleteProductBy(id);
+        productService.deleteProduct(id);
         try {
             response.sendRedirect("/products");
         } catch (IOException exception) {

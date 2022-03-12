@@ -1,6 +1,7 @@
 package org.store.dao.jdbc.template;
 
 import org.store.dao.jdbc.mapper.ProductMapper;
+import org.store.dao.jdbc.utils.ConnectionFactory;
 import org.store.exception.ProductNotFoundException;
 import org.store.web.entity.Product;
 
@@ -8,7 +9,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class JdbcProductTemplate {
@@ -51,18 +51,6 @@ public class JdbcProductTemplate {
             return preparedStatement.execute();
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
-        }
-    }
-
-    public Optional<Product> findOptionalProductById(Long id, String sql) {
-        try (Connection connection = connectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            preparedStatement.setLong(1, id);
-            logger.info(String.valueOf(preparedStatement));
-            return ROW_PRODUCT_MAPPER.productMapper(resultSet);
-        } catch (SQLException sqlException) {
-            throw new ProductNotFoundException(sqlException.getMessage(), sqlException);
         }
     }
 

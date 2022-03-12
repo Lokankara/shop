@@ -1,13 +1,9 @@
-package org.store.dao.jdbc.template;
+package org.store.dao.jdbc.utils;
 
-import javax.sql.DataSource;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public class ConnectionFactory {
     private final String url;

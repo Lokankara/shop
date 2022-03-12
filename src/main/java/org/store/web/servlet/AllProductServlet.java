@@ -24,22 +24,22 @@ public class AllProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Product> productList = productService.findAll();
-        Map<String, List<Product>> model = new HashMap<>();
-        model.put("products", productList);
-        try {
-            PageGenerator.getPage(filename, response.getWriter(), model);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception.getMessage(), exception);
-        }
+        refresh(response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         Optional<Product> optionalProduct = Optional.of(productMapper(request));
-            optionalProduct.ifPresent(productService::saveProduct);
+        optionalProduct.ifPresent(productService::saveProduct);
+        refresh(response);
+    }
+
+    private void refresh(HttpServletResponse response) {
+        List<Product> productList = productService.findAll();
+        Map<String, List<Product>> model = new HashMap<>();
+        model.put("products", productList);
         try {
-            response.sendRedirect("/products");
+            PageGenerator.getPage(filename, response.getWriter(), model);
         } catch (IOException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }

@@ -1,11 +1,9 @@
 package org.store.service;
 
 import org.store.dao.ProductDao;
-import org.store.exception.ProductNotFoundException;
 import org.store.web.entity.Product;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ProductService {
 
@@ -27,15 +25,8 @@ public class ProductService {
         return productDao.update(product);
     }
 
-    public boolean deleteProductBy(Long id) {
-        return productDao.deleteBy(id);
+    public boolean deleteProduct(Long id) {
+        return productDao.delete(id);
     }
 
-    public Product findProductBy(Long id) {
-        Optional<Product> optionalProduct =
-                productDao.findBy(id);
-
-        return optionalProduct.orElseThrow(() ->
-                new ProductNotFoundException("Product By Id not founded"));
-    }
 }

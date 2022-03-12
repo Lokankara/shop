@@ -15,6 +15,7 @@ public class User {
     private Long user_id;
     private String username;
     private String password;
+    private String salt;
     private boolean auth;
     private boolean enabled;
     private boolean expired;
