@@ -1,1 +1,1 @@
-web: java -Xms150M -jar target/shop-1.0-SNAPSHOT.jar
+java $JAVA_OPTS -Dport=$PORT -jar target/shop-jar-with-dependencies.jar

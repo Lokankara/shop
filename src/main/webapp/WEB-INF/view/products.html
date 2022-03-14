@@ -95,7 +95,7 @@
     </thead>
     <#list products as product>
     <tr>
-        <form action="/products/edit" method="post" class="form-container">
+        <form action="/products/add" method="post" class="form-container">
             <input type="hidden" name="id" id="id" value="${product.id}"/>
             <td><input style="border: none;" type="text" onclick="" name="name" id="name" value="${product.name}"/></td>
             <td><input style="border: none;" type="text" onclick="" name="description" id="description" value="${product.description}"/></td>
@@ -111,7 +111,7 @@
 <button class="open-button btn btn-primary" onclick="openForm()">Add Product</button>
 
 <div class="form-popup" id="myForm">
-    <form action="/products" method="post" class="form-container">
+    <form action="/products/add" method="post" class="form-container">
 
         <h2>New Product</h2>
         <label><b>Name</b></label>

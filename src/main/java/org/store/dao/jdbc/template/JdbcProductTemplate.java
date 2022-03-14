@@ -46,7 +46,12 @@ public class JdbcProductTemplate {
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
-            preparedStatement.setTimestamp(4, Timestamp.valueOf(product.getCreated()));
+
+            if (product.getId() == 0) {
+                preparedStatement.setTimestamp(4, Timestamp.valueOf(product.getCreated()));
+            } else {
+                preparedStatement.setLong(4, product.getId());
+            }
             logger.info(String.valueOf(preparedStatement));
             return preparedStatement.execute();
         } catch (SQLException exception) {
@@ -58,20 +63,6 @@ public class JdbcProductTemplate {
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
-            logger.info(String.valueOf(preparedStatement));
-            return preparedStatement.execute();
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception.getMessage(), exception);
-        }
-    }
-
-    public boolean updateProductQuery(Product product, String sql) {
-        try (Connection connection = connectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, product.getName());
-            preparedStatement.setString(2, product.getDescription());
-            preparedStatement.setDouble(3, product.getPrice());
-            preparedStatement.setLong(4, product.getId());
             logger.info(String.valueOf(preparedStatement));
             return preparedStatement.execute();
         } catch (SQLException exception) {

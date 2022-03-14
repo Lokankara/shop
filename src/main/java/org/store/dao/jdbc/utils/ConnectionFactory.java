@@ -1,11 +1,14 @@
 package org.store.dao.jdbc.utils;
 
+import javax.sql.DataSource;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-public class ConnectionFactory {
+public class ConnectionFactory implements DataSource {
     private final String url;
     private final String username;
     private final String password;
@@ -20,11 +23,52 @@ public class ConnectionFactory {
         this.password = properties.getProperty(DB_PASSWORD_PROPERTY_NAME);
     }
 
+    @Override
     public Connection getConnection() {
+        return getConnection(username, password);
+    }
+
+    @Override
+    public Connection getConnection(String username, String password) {
         try {
             return DriverManager.getConnection(url, username, password);
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
         }
+    }
+
+    @Override
+    public PrintWriter getLogWriter() {
+        return null;
+    }
+
+    @Override
+    public void setLogWriter(PrintWriter out) {
+
+    }
+
+    @Override
+    public void setLoginTimeout(int seconds) {
+
+    }
+
+    @Override
+    public int getLoginTimeout() {
+        return 0;
+    }
+
+    @Override
+    public Logger getParentLogger() {
+        return null;
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) {
+        return false;
     }
 }

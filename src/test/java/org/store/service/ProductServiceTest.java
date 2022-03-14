@@ -32,7 +32,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName(value = "Test save invokes and return true")
+    @DisplayName(value = "Test save Product invokes and return true")
     void saveProduct() {
         when(mockDao.save(product)).thenReturn(true);
         boolean isSaved = productService.saveProduct(product);
@@ -50,10 +50,12 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProduct() {
-    }
-
-    @Test
+    @DisplayName(value = "Test remove Product invokes and return true")
     void deleteProduct() {
+        Long id = product.getId();
+        when(mockDao.delete(id)).thenReturn(true);
+        boolean isRemoved = productService.deleteProduct(id);
+        verify(mockDao).delete(id);
+        assertTrue(isRemoved);
     }
 }

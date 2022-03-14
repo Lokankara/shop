@@ -9,6 +9,10 @@ CREATE TABLE products (
 CREATE TABLE users (
     user_id serial PRIMARY KEY,
     username VARCHAR (50) NOT NULL,
-    password VARCHAR (50) NOT NULL
+    password VARCHAR (150) NOT NULL,
+    salt VARCHAR (150) NOT NULL,
+    auth BOOLEAN NOT NULL,
+    enabled BOOLEAN NOT NULL,
+    expired BOOLEAN NOT NULL,
+    created TIMESTAMP NOT NULL
 );
-

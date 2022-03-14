@@ -21,10 +21,6 @@ public class ProductService {
         return productDao.save(product);
     }
 
-    public boolean updateProduct(Product product) {
-        return productDao.update(product);
-    }
-
     public boolean deleteProduct(Long id) {
         return productDao.delete(id);
     }

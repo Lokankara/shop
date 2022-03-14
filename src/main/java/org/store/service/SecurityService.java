@@ -7,10 +7,7 @@ import org.store.web.entity.User;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 public class SecurityService {
@@ -34,16 +31,12 @@ public class SecurityService {
 
     public void addSalt(User user) {
         String salt = generateUUID();
-        String encoded = encode(salt + user.getPassword());
-        user.setPassword(encoded);
         user.setSalt(salt);
+        String encoded = encode(user.getPassword(), salt);
+        user.setPassword(encoded);
     }
 
-    String encode(String value) {
-        return DigestUtils.sha256Hex(value.getBytes(StandardCharsets.UTF_8));
-    }
-
-    String generateUUID() {
+    public static String generateUUID() {
         return UUID.randomUUID().toString();
     }
 
@@ -54,13 +47,27 @@ public class SecurityService {
     }
 
     public String encode(String rawPassword, String salt) {
-        return DigestUtils.sha256Hex(rawPassword + salt);
+        return DigestUtils.sha256Hex((rawPassword + salt).getBytes(StandardCharsets.UTF_8));
     }
 
-    public boolean isAuthorization(User user, String token) {
-        User userDb = userService.findUserById(user.getUser_id()).orElseThrow();
+    public boolean isAuthorization(User user) {
+        User userDb = userService.findUserByName(user.getUsername()).orElseThrow();
         String salt = userDb.getSalt();
-        String hashedSatled = userDb.getPassword();
+        String hashedSalted = userDb.getPassword();
         return false;
+    }
+
+    public void checkUser(User user) {
+        String username = user.getUsername();
+        Optional<User> optionalUserFromDb = userService.findUserByName(username);
+
+        if (optionalUserFromDb.isEmpty()) {
+            userService.saveUser(user);
+            addSalt(user);
+            user.setToken(generateToken());
+        } else {
+            boolean auth = isAuthorization(user);
+            user.setAuth(auth);
+        }
     }
 }

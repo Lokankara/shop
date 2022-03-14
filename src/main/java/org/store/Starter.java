@@ -14,10 +14,7 @@ import org.store.security.filters.SecurityFilter;
 import org.store.service.ProductService;
 import org.store.service.SecurityService;
 import org.store.service.UserService;
-import org.store.web.servlet.AllProductServlet;
-import org.store.web.servlet.ProductServlet;
-import org.store.web.servlet.SecurityServlet;
-import org.store.web.servlet.StaticServlet;
+import org.store.web.servlet.*;
 import org.store.web.utils.PropertiesReader;
 
 import javax.servlet.DispatcherType;
@@ -41,12 +38,13 @@ public class Starter {
 
         ServletContextHandler contextHandler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
-//        contextHandler.addFilter(new FilterHolder(new SecurityFilter(securityService)), "/*", EnumSet.of(DispatcherType.REQUEST));
+
+//        contextHandler.addFilter(new FilterHolder(new SecurityFilter(securityService, userService)), "/products/*", EnumSet.of(DispatcherType.REQUEST));
         contextHandler.addServlet(new ServletHolder(new StaticServlet()), "/static/*");
         contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
-        contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/edit");
+        contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/add");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/remove");
-//        contextHandler.addServlet(new ServletHolder(new SecurityServlet(securityService, userService)), "/");
+        contextHandler.addServlet(new ServletHolder(new SecurityServlet(securityService)), "/login");
 
         Server server = new Server(8080);
         server.setHandler(contextHandler);

@@ -13,7 +13,7 @@ import java.util.Map;
 public class PageGenerator {
 
     private static final Configuration CONFIGURATION = new Configuration(Configuration.VERSION_2_3_19);
-    private static final String HTML_DIR = "src/main/webapp/WEB-INF/views/";
+    private static final String HTML_DIR = "src/main/webapp/WEB-INF/view/";
 
     public static String getPage(String filename, PrintWriter printWriter, Map<String, List<Product>> data) {
         try {

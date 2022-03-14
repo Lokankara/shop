@@ -24,12 +24,6 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public boolean update(Product product) {
-        return jdbcProductTemplate
-                .updateProductQuery(product, UPDATE_SQL);
-    }
-
-    @Override
     public boolean delete(Long id) {
         return jdbcProductTemplate
                 .deleteProductById(id, DELETE_BY_ID_SQL);
@@ -37,7 +31,12 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public boolean save(Product product) {
-        return jdbcProductTemplate
-                .setProductQuery(product, INSERT_PRODUCT_SQL);
+        if (product.getId() == 0) {
+            return jdbcProductTemplate
+                    .setProductQuery(product, INSERT_PRODUCT_SQL);
+        } else {
+            return jdbcProductTemplate
+                    .setProductQuery(product, UPDATE_SQL);
+        }
     }
 }

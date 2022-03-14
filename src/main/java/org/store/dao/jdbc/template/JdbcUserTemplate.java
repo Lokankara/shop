@@ -19,34 +19,23 @@ public class JdbcUserTemplate {
 
     private final Logger logger = Logger.getLogger(JdbcUserTemplate.class.getName());
 
-
-    public Optional<User> findUserByIdQuery(Long id, String sql) {
-        try (Connection connection = connectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            preparedStatement.setLong(1, id);
-            logger.info(String.valueOf(preparedStatement));
-            return ROW_USER_MAPPER.userMapper(resultSet);
-        } catch (SQLException sqlException) {
-            throw new RuntimeException(sqlException.getMessage(), sqlException);
-        }
-    }
-
     public Optional<User> findUserByNameQuery(String username, String sql) {
-
+        Optional<User> user = Optional.empty();
         try (Connection connection = connectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
             logger.info(String.valueOf(preparedStatement));
-            return ROW_USER_MAPPER.userMapper(resultSet);
+            while (resultSet.next()) {
+                user = ROW_USER_MAPPER.userMapper(resultSet);
+            }
+            return user;
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
     }
 
     public boolean setUserQuery(User user, String sql) {
-        user.setCreated(LocalDateTime.now());
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUsername());
@@ -55,7 +44,7 @@ public class JdbcUserTemplate {
             preparedStatement.setBoolean(4, true);
             preparedStatement.setBoolean(5, true);
             preparedStatement.setBoolean(6, true);
-            preparedStatement.setTimestamp(7, Timestamp.valueOf(user.getCreated()));
+            preparedStatement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
             logger.info(String.valueOf(preparedStatement));
             return preparedStatement.execute();
         } catch (SQLException exception) {

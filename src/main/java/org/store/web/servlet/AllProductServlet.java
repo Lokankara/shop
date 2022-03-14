@@ -12,29 +12,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import static org.store.web.utils.Getters.productMapper;
 
 @AllArgsConstructor
 public class AllProductServlet extends HttpServlet {
 
-    private static final String filename = "products.html";
     private final ProductService productService;
+    private static final String filename = "products.html";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        refresh(response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        Optional<Product> optionalProduct = Optional.of(productMapper(request));
-        optionalProduct.ifPresent(productService::saveProduct);
-        refresh(response);
-    }
-
-    private void refresh(HttpServletResponse response) {
         List<Product> productList = productService.findAll();
         Map<String, List<Product>> model = new HashMap<>();
         model.put("products", productList);
@@ -44,5 +30,4 @@ public class AllProductServlet extends HttpServlet {
             throw new RuntimeException(exception.getMessage(), exception);
         }
     }
-
 }
