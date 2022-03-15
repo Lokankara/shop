@@ -5,6 +5,7 @@ import org.store.dao.jdbc.template.JdbcProductTemplate;
 import org.store.web.entity.Product;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JdbcProductDao implements ProductDao {
 
@@ -12,6 +13,8 @@ public class JdbcProductDao implements ProductDao {
     private static final String SELECT_ALL_SQL = "SELECT id, name, description, price, created FROM products;";
     private static final String UPDATE_SQL = "UPDATE products SET name =?, description =?, price =? WHERE id =?;";
     private static final String DELETE_BY_ID_SQL = "DELETE FROM products WHERE id=?;";
+    private static final String SELECT_BY_IDS_SQL = "SELECT name, price FROM products WHERE FIND_IN_SET %s";
+
     private final JdbcProductTemplate jdbcProductTemplate;
 
     public JdbcProductDao(JdbcProductTemplate jdbcProductTemplate) {
@@ -27,6 +30,15 @@ public class JdbcProductDao implements ProductDao {
     public boolean delete(Long id) {
         return jdbcProductTemplate
                 .deleteProductById(id, DELETE_BY_ID_SQL);
+    }
+
+    @Override
+    public List<Product> findByIds(List<Long> ids) {
+        String joinIds = ids.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(",", "(", ")"));
+        String sql = String.format(SELECT_BY_IDS_SQL, joinIds);
+        return jdbcProductTemplate.getProductsQuery(sql);
     }
 
     @Override

@@ -22,6 +22,7 @@ public class AllProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         List<Product> productList = productService.findAll();
+
         Map<String, List<Product>> model = new HashMap<>();
         model.put("products", productList);
         try {

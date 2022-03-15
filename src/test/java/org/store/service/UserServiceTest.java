@@ -16,22 +16,22 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     private static UserService userService;
-    private static UserDao mockDao;
+    private static UserDao mockUserDao;
     private static Optional<User> user;
 
     @BeforeAll
     static void beforeAll() {
-        mockDao = mock(JdbcUserDao.class);
-        userService = new UserService(mockDao);
+        mockUserDao = mock(JdbcUserDao.class);
+        userService = new UserService(mockUserDao);
         user = Optional.of(User.builder().user_id(1L).username("user").password("test").salt("secret").build());
     }
 
     @Test
     @DisplayName(value = "Test save User invokes and return true")
     void saveUser() {
-        when(mockDao.saveUser(user.get())).thenReturn(true);
+        when(mockUserDao.saveUser(user.get())).thenReturn(true);
         boolean isSaved = userService.saveUser(user.orElseThrow());
-        verify(mockDao).saveUser(user.get());
+        verify(mockUserDao).saveUser(user.get());
         assertTrue(isSaved);
     }
 
@@ -39,9 +39,9 @@ class UserServiceTest {
     @DisplayName(value = "Test get user by name and return optional users")
     void findUserById() {
         String username = user.orElseThrow().getUsername();
-        when(mockDao.findUserByName(username)).thenReturn(user);
+        when(mockUserDao.findUserByName(username)).thenReturn(user);
         Optional<User> actual = userService.findUserByName(username);
         assertEquals(user, actual);
-        verify(mockDao).findUserByName(username);
+        verify(mockUserDao).findUserByName(username);
     }
 }

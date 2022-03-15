@@ -2,7 +2,6 @@ package org.store.web.servlet;
 
 import lombok.AllArgsConstructor;
 import org.store.service.SecurityService;
-import org.store.web.entity.User;
 import org.store.web.utils.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -10,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-
-import static org.store.web.utils.Getters.userMapper;
 
 @AllArgsConstructor
 public class SecurityServlet extends HttpServlet {
@@ -30,9 +27,7 @@ public class SecurityServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        User user = userMapper(request).orElseThrow();
-        securityService.checkUser(user);
-
+        securityService.checkUser(request);
         try {
             response.sendRedirect("/products");
         } catch (IOException exception) {

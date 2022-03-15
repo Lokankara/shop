@@ -17,8 +17,6 @@ public class UserMapper {
                 .password(resultSet.getString(COLUMN_USER[2]))
                 .salt(resultSet.getString(COLUMN_USER[3]))
                 .auth(resultSet.getBoolean(COLUMN_USER[4]))
-                .enabled(resultSet.getBoolean(COLUMN_USER[5]))
-                .expired(resultSet.getBoolean(COLUMN_USER[6]))
                 .build());
     }
 }

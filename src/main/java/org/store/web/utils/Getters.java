@@ -32,4 +32,5 @@ public class Getters {
             throw new RuntimeException(exception.getMessage(), exception);
         }
     }
+
 }

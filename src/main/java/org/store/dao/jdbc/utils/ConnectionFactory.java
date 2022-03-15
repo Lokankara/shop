@@ -44,12 +44,10 @@ public class ConnectionFactory implements DataSource {
 
     @Override
     public void setLogWriter(PrintWriter out) {
-
     }
 
     @Override
     public void setLoginTimeout(int seconds) {
-
     }
 
     @Override

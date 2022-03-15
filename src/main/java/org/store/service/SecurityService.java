@@ -1,35 +1,45 @@
 package org.store.service;
 
-import lombok.AllArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.store.web.entity.Session;
 import org.store.web.entity.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
-@AllArgsConstructor
+import static org.store.web.utils.Getters.userMapper;
+
 public class SecurityService {
-
     private final UserService userService;
+    private final Session session;
+    private Map<User, String> tokens;
 
-    private final List<String> tokens = Collections.synchronizedList(new ArrayList<>());
-
-    public boolean isAuthentication(HttpServletRequest request) {
-
-        Cookie[] cookies = request.getCookies();
-        boolean isValid = false;
-        for (Cookie cookie : cookies) {
-            if ("user-token".equals(cookie.getName())) {
-                isValid = true;
-            }
-            break;
-        }
-        return isValid;
+    public SecurityService(UserService userService, Session session) {
+        this.userService = userService;
+        this.session = session;
     }
 
-    public void addSalt(User user) {
+    public Session isAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("user-token")) {
+                session.setToken(cookie.getValue());
+            } else {
+                Cookie newCookie = new Cookie("user-token", generateUUID());
+                newCookie.setMaxAge(600);
+                response.addCookie(newCookie);
+                session.setToken(newCookie.getValue());
+            }
+        }
+        return session;
+    }
+
+    private void addSalt(User user) {
         String salt = generateUUID();
         user.setSalt(salt);
         String encoded = encode(user.getPassword(), salt);
@@ -40,34 +50,48 @@ public class SecurityService {
         return UUID.randomUUID().toString();
     }
 
-    String generateToken() {
-        String token = generateUUID();
-        tokens.add(token);
-        return token;
+    private void generateToken(User user) {
+        tokens.put(user, generateUUID());
     }
 
-    public String encode(String rawPassword, String salt) {
+    private String encode(String rawPassword, String salt) {
         return DigestUtils.sha256Hex((rawPassword + salt).getBytes(StandardCharsets.UTF_8));
     }
 
-    public boolean isAuthorization(User user) {
-        User userDb = userService.findUserByName(user.getUsername()).orElseThrow();
-        String salt = userDb.getSalt();
-        String hashedSalted = userDb.getPassword();
-        return false;
+    public boolean isAuthorization(String token) {
+        return tokens.containsKey(token);
     }
 
-    public void checkUser(User user) {
+    public void checkUser(HttpServletRequest request) {
+
+        User user = userMapper(request).orElseThrow();
         String username = user.getUsername();
         Optional<User> optionalUserFromDb = userService.findUserByName(username);
-
-        if (optionalUserFromDb.isEmpty()) {
-            userService.saveUser(user);
-            addSalt(user);
-            user.setToken(generateToken());
+        boolean isValid = false;
+        if (!optionalUserFromDb.isEmpty()) {
+            isValid = checkNameAndPassword(user, optionalUserFromDb);
         } else {
-            boolean auth = isAuthorization(user);
-            user.setAuth(auth);
+//            register(user);
         }
+        if (isValid) {
+            session.setUser(user);
+        }
+//            generateToken(user);
+    }
+
+    private void register(User user) {
+        addSalt(user);
+        userService.saveUser(user);
+    }
+
+    private boolean checkNameAndPassword(User user, Optional<User> userDb) {
+        User userFromDb = userDb.orElseThrow();
+        String salt = userFromDb.getSalt();
+        String rawPassword = user.getPassword();
+        String saltedPassword = encode(rawPassword, salt);
+        if (saltedPassword.equals(userFromDb.getPassword())) {
+            user.setAuth(true);
+        }
+        return user.isAuth();
     }
 }

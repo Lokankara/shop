@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class JdbcUserDao implements UserDao {
 
-    private static final String SELECT_BY_USERNAME_SQL = "SELECT username, password, salt, auth, enabled, expired FROM users WHERE username=?;";
-    private static final String INSERT_USER_SQL = "INSERT INTO users (username, password, salt, auth, enabled, expired, created) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    private static final String SELECT_BY_USERNAME_SQL = "SELECT username, password, salt, auth FROM users WHERE username=?;";
+    private static final String INSERT_USER_SQL = "INSERT INTO users (username, password, salt, role, auth, created) VALUES (?, ?, ?, ?, ?, ?);";
 
     private final JdbcUserTemplate jdbcUserTemplate;
 

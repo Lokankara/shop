@@ -41,10 +41,9 @@ public class JdbcUserTemplate {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getSalt());
-            preparedStatement.setBoolean(4, true);
+            preparedStatement.setString(4, "guest");
             preparedStatement.setBoolean(5, true);
-            preparedStatement.setBoolean(6, true);
-            preparedStatement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             logger.info(String.valueOf(preparedStatement));
             return preparedStatement.execute();
         } catch (SQLException exception) {

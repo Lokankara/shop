@@ -18,19 +18,20 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+
         Product product = productMapper(request);
         productService.saveProduct(product);
-        try {
-            response.sendRedirect("/products");
-        } catch (IOException exception) {
-            throw new RuntimeException(exception.getMessage(), exception);
-        }
+        redirect(response);
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         Long id = Long.parseLong(request.getParameter("id"));
         productService.deleteProduct(id);
+        redirect(response);
+    }
+
+    private void redirect(HttpServletResponse response) {
         try {
             response.sendRedirect("/products");
         } catch (IOException exception) {
