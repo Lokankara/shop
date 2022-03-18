@@ -7,6 +7,7 @@ import org.store.web.entity.User;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
@@ -22,18 +23,18 @@ public class SecurityService {
         this.session = session;
     }
 
-    private void addSalt(User user) {
+    private void addEncodedSalt(User user) {
         String salt = generateUUID();
         user.setSalt(salt);
         String encoded = encode(user.getPassword(), salt);
         user.setPassword(encoded);
     }
 
-    private String generateToken(Long id) {
+    private String setToken(Long id) {
         User userFromDb = userService.findUserById(id).orElseThrow();
-        Map<User, String> userTokens = session.getUserTokens();
+        Map<User, String> userTokens = session.getTokenStorage();
         userTokens.put(userFromDb, generateUUID());
-        session.setUserTokens(userTokens);
+        session.setTokenStorage(userTokens);
         session.setExpired(true);
         return session.getToken();
     }
@@ -43,8 +44,8 @@ public class SecurityService {
     }
 
     private void register(User user) {
-        generateToken(user.getUser_id());
-        addSalt(user);
+        setToken(user.getUser_id());
+        addEncodedSalt(user);
         userService.saveUser(user);
     }
 
@@ -69,5 +70,11 @@ public class SecurityService {
 
     public static String generateUUID() {
         return UUID.randomUUID().toString();
+    }
+
+    public void checkUser(HttpServletRequest request) {
+        HttpSession sessionStorage = request.getSession();
+
+        request.getParameter("");
     }
 }

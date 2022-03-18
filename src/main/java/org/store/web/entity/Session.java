@@ -14,5 +14,5 @@ public class Session {
     private boolean expired;
     private User user;
     private List<Product> productList;
-    private Map<User, String> userTokens;
+    private Map<User, String> tokenStorage;
 }

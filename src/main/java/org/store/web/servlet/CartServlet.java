@@ -38,6 +38,7 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         Long id = Long.parseLong(request.getParameter("id"));
+        //TODO INFO: SELECT id, name, description, price, created FROM products WHERE id =85
         Product product = productService.findById(id).orElseThrow();
         List<Product> productList = session.getProductList();
         productList.add(product);
