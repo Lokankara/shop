@@ -18,9 +18,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public Optional<User> findUserByName(String username) {
+    public Optional<User> findUserById(Long id) {
         return jdbcUserTemplate.findUserByNameQuery(
-                username, SELECT_BY_USERNAME_SQL);
+                id, SELECT_BY_USERNAME_SQL);
     }
 
     public boolean saveUser(User user) {

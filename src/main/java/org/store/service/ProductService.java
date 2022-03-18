@@ -4,6 +4,7 @@ import org.store.dao.ProductDao;
 import org.store.web.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductService {
 
@@ -25,8 +26,7 @@ public class ProductService {
         return productDao.delete(id);
     }
 
-    public List<Product> findByProductIds(List<Long> ids) {
-        return productDao.findByIds(ids);
+    public Optional<Product> findById(Long id) {
+        return productDao.findById(id);
     }
-
 }

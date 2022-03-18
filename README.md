@@ -21,6 +21,8 @@ architecture 3-layer MVC => UML
 - [Deploy to Heroku]()
 - [Add Flyway]()
 
+// locator setAtr(session);
+
 // db dump
 // register -> login, password -> register(login, password) ->
 //					String salt = UUID.getUuid().toString();

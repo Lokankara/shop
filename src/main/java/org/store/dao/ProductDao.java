@@ -3,7 +3,7 @@ package org.store.dao;
 import org.store.web.entity.Product;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public interface ProductDao {
 
@@ -13,5 +13,5 @@ public interface ProductDao {
 
     boolean delete(Long id);
 
-    List<Product> findByIds(List<Long> ids);
+    Optional<Product> findById(Long id);
 }

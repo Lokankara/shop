@@ -9,34 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
-import static org.store.web.utils.Getters.userMapper;
+import static org.store.web.utils.WebUtils.userMapper;
 
 public class SecurityService {
     private final UserService userService;
     private final Session session;
-    private Map<User, String> tokens;
 
     public SecurityService(UserService userService, Session session) {
         this.userService = userService;
         this.session = session;
-    }
-
-    public Session isAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("user-token")) {
-                session.setToken(cookie.getValue());
-            } else {
-                Cookie newCookie = new Cookie("user-token", generateUUID());
-                newCookie.setMaxAge(600);
-                response.addCookie(newCookie);
-                session.setToken(newCookie.getValue());
-            }
-        }
-        return session;
     }
 
     private void addSalt(User user) {
@@ -46,52 +29,45 @@ public class SecurityService {
         user.setPassword(encoded);
     }
 
-    public static String generateUUID() {
-        return UUID.randomUUID().toString();
-    }
-
-    private void generateToken(User user) {
-        tokens.put(user, generateUUID());
+    private String generateToken(Long id) {
+        User userFromDb = userService.findUserById(id).orElseThrow();
+        Map<User, String> userTokens = session.getUserTokens();
+        userTokens.put(userFromDb, generateUUID());
+        session.setUserTokens(userTokens);
+        session.setExpired(true);
+        return session.getToken();
     }
 
     private String encode(String rawPassword, String salt) {
         return DigestUtils.sha256Hex((rawPassword + salt).getBytes(StandardCharsets.UTF_8));
     }
 
-    public boolean isAuthorization(String token) {
-        return tokens.containsKey(token);
-    }
-
-    public void checkUser(HttpServletRequest request) {
-
-        User user = userMapper(request).orElseThrow();
-        String username = user.getUsername();
-        Optional<User> optionalUserFromDb = userService.findUserByName(username);
-        boolean isValid = false;
-        if (!optionalUserFromDb.isEmpty()) {
-            isValid = checkNameAndPassword(user, optionalUserFromDb);
-        } else {
-//            register(user);
-        }
-        if (isValid) {
-            session.setUser(user);
-        }
-//            generateToken(user);
-    }
-
     private void register(User user) {
+        generateToken(user.getUser_id());
         addSalt(user);
         userService.saveUser(user);
     }
 
-    private boolean checkNameAndPassword(User user, Optional<User> userDb) {
-        User userFromDb = userDb.orElseThrow();
-        String salt = userFromDb.getSalt();
-        String rawPassword = user.getPassword();
-        String saltedPassword = encode(rawPassword, salt);
-        if (saltedPassword.equals(userFromDb.getPassword())) {
-            user.setAuth(true);
+    public void setUserToken(HttpServletRequest request, HttpServletResponse response, Session session) {
+
+        User user = userMapper(request).orElseThrow();
+        session.setUser(user);
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("user-token")) {
+                session.setToken((cookie.getValue()));
+            } else {
+                cookie = new Cookie("user-token", generateUUID());
+                cookie.setMaxAge(300);
+                session.getUser().setAuth(true);
+                session.setToken(cookie.getValue());
+                response.addCookie(cookie);
+            }
         }
-        return user.isAuth();
+    }
+
+    public static String generateUUID() {
+        return UUID.randomUUID().toString();
     }
 }

@@ -2,10 +2,8 @@ package org.store.service;
 
 import lombok.AllArgsConstructor;
 import org.store.dao.UserDao;
-import org.store.web.entity.Session;
 import org.store.web.entity.User;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -17,13 +15,8 @@ public class UserService {
         return userDao.saveUser(user);
     }
 
-    public Optional<User> findUserByName(String username) {
-        return userDao.findUserByName(username);
+    public Optional<User> findUserById(Long id) {
+        return userDao.findUserById(id);
     }
 
-    public void addToCart(Session session, Long id) {
-        List<Long> products = session.getProducts();
-        products.add(id);
-        session.setProducts(products);
-    }
 }

@@ -18,4 +18,5 @@ public class Product {
     private String description;
     private double price;
     private LocalDateTime created;
+    private String userName;
 }

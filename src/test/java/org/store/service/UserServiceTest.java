@@ -38,10 +38,10 @@ class UserServiceTest {
     @Test
     @DisplayName(value = "Test get user by name and return optional users")
     void findUserById() {
-        String username = user.orElseThrow().getUsername();
-        when(mockUserDao.findUserByName(username)).thenReturn(user);
-        Optional<User> actual = userService.findUserByName(username);
+        Long id = user.orElseThrow().getUser_id();
+        when(mockUserDao.findUserById(id)).thenReturn(user);
+        Optional<User> actual = userService.findUserById(id);
         assertEquals(user, actual);
-        verify(mockUserDao).findUserByName(username);
+        verify(mockUserDao).findUserById(id);
     }
 }

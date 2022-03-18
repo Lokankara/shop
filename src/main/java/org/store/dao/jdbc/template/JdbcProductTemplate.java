@@ -9,6 +9,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class JdbcProductTemplate {
@@ -67,6 +68,22 @@ public class JdbcProductTemplate {
             return preparedStatement.execute();
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
+        }
+    }
+
+    public Optional<Product> findProductByQuery(Long id, String sql) {
+        Optional<Product> product = Optional.empty();
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            logger.info(String.valueOf(preparedStatement));
+            while (resultSet.next()) {
+                product = ROW_PRODUCT_MAPPER.productMapper(resultSet);
+            }
+            return product;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
     }
 }

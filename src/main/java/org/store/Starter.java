@@ -10,11 +10,11 @@ import org.store.dao.jdbc.JdbcUserDao;
 import org.store.dao.jdbc.template.JdbcProductTemplate;
 import org.store.dao.jdbc.template.JdbcUserTemplate;
 import org.store.dao.jdbc.utils.ConnectionFactory;
-import org.store.web.entity.Session;
-import org.store.web.security.filters.SecurityFilter;
 import org.store.service.ProductService;
 import org.store.service.SecurityService;
 import org.store.service.UserService;
+import org.store.web.entity.Session;
+import org.store.web.security.filters.SecurityFilter;
 import org.store.web.servlet.*;
 import org.store.web.utils.PropertiesReader;
 
@@ -40,14 +40,14 @@ public class Starter {
 
         ServletContextHandler contextHandler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
-
-        contextHandler.addFilter(new FilterHolder(new SecurityFilter(securityService)), "/products/*", EnumSet.of(DispatcherType.REQUEST));
+        contextHandler.addFilter(new FilterHolder(new SecurityFilter(securityService, session)), "/products/", EnumSet.of(DispatcherType.REQUEST));
         contextHandler.addServlet(new ServletHolder(new StaticServlet()), "/static/*");
         contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
-        contextHandler.addServlet(new ServletHolder(new CartServlet(userService, session)), "/products/cart");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/add");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/remove");
-        contextHandler.addServlet(new ServletHolder(new SecurityServlet(securityService)), "/login");
+        contextHandler.addServlet(new ServletHolder(new CartServlet(productService, session)), "/products/cart");
+        contextHandler.addServlet(new ServletHolder(new LoginServlet(securityService, session)), "/login");
+        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
 
         Server server = new Server(8080);
         server.setHandler(contextHandler);

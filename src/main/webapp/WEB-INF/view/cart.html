@@ -25,16 +25,16 @@
 
     </tr>
     </thead>
-    <#list products as product>
+    <#list cartItems as cartItem>
     <tr>
         <form action="/products/add" method="post" class="form-container">
-            <input type="hidden" name="id" id="id" value="${product.id}"/>
-            <td><input style="border: none;" type="text" onclick="" name="name" id="name" value="${product.name}"/></td>
-            <td><input style="border: none;" type="text" onclick="" name="description" id="description" value="${product.description}"/></td>
-            <td><input style="border: none;" type="text" onclick="" name="price" id="price" value="${product.price?string.computer}"/></td>
-            <td><button type="button" onclick="remove(${product.id})" class="btn btn-outline-danger">Delete</button></td>
+            <input type="hidden" name="id" id="id" value="${cartItem.id}"/>
+            <td><input style="border: none;" type="text" onclick="" name="name" id="name" value="${cartItem.name}"/></td>
+            <td><input style="border: none;" type="text" onclick="" name="description" id="description" value="${cartItem.description}"/></td>
+            <td><input style="border: none;" type="text" onclick="" name="price" id="price" value="${cartItem.price?string.computer}"/></td>
+            <td><button type="button" onclick="remove(${cartItem.id})" class="btn btn-outline-danger">Delete</button></td>
             <td><input style="border: none;" type="text" id="created" name="created"
-                       value="${product.created?datetime.iso?string('dd.MM.yy HH:mm:ss')}"/></td>
+                       value="${cartItem.created?datetime.iso?string('dd.MM.yy HH:mm:ss')}"/></td>
         </form>
     </tr>
 </#list>

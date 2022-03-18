@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.store.web.utils.Getters.productMapper;
+import static org.store.web.utils.WebUtils.productMapper;
 
 @AllArgsConstructor
 public class ProductServlet extends HttpServlet {
@@ -18,7 +18,6 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
         Product product = productMapper(request);
         productService.saveProduct(product);
         redirect(response);
