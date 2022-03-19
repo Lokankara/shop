@@ -95,7 +95,7 @@
             <td><input style="border: none;" type="text" onclick="" name="description" id="description" value="${product.description}"/></td>
             <td><input style="border: none;" type="text" onclick="" name="price" id="price" value="${product.price?string.computer}"/></td>
             <td><button type="button" onclick="bucket(${product.id})" class="btn btn-outline-success"><span><i class="fa fa-cart-arrow-down"></i></span></button>
-            <button type="submit" onclick="refresh()" class="btn btn-outline-primary"><span><i class="fa fa-edit"></i></span></button>
+                <button type="submit" onclick="refresh()" class="btn btn-outline-primary"><span><i class="fa fa-edit"></i></span></button>
 
                 <button type="button" onclick="remove(${product.id})" class="btn btn-outline-danger"><span><i class="fa fa-trash"></i></span></button></td>
             <td><input style="border: none;" type="text" id="created" name="created"
@@ -134,18 +134,16 @@
 
     function remove(id) {
         fetch('/products/remove?id=' + id, {method: 'DELETE'}).then(result => console.log(result));
-        document.location.assign("/products");
+
     }
 
     function bucket(id) {
         fetch('/products/cart?id=' + id, {method: 'POST'}).then(result => console.log(result));
-        document.location.assign("/products");
     }
 
     function refresh() {
         window.location.href = "http://localhost:8080/products";
         document.cookie = "refresh";
-        location.reload();
 
     }
 </script>

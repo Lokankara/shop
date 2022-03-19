@@ -41,13 +41,13 @@ public class Starter {
         ServletContextHandler contextHandler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.addServlet(new ServletHolder(new StaticServlet()), "/static/*");
+        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
         contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/add");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/remove");
-        contextHandler.addServlet(new ServletHolder(new LoginServlet(securityService, session)), "/login");
+        contextHandler.addServlet(new ServletHolder(new CartServlet(productService, session)), "/products/cart/*");
+        contextHandler.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
         contextHandler.addFilter(new FilterHolder(new SecurityFilter(securityService, session)), "/products", EnumSet.of(DispatcherType.REQUEST));
-        contextHandler.addServlet(new ServletHolder(new CartServlet(productService,session)), "/products/cart");
-        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
 
         Server server = new Server(8080);
         server.setHandler(contextHandler);

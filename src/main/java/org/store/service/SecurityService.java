@@ -1,27 +1,23 @@
 package org.store.service;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.store.web.entity.Session;
 import org.store.web.entity.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.store.web.utils.WebUtils.userMapper;
-
+@AllArgsConstructor
 public class SecurityService {
     private final UserService userService;
     private final Session session;
 
-    public SecurityService(UserService userService, Session session) {
-        this.userService = userService;
-        this.session = session;
-    }
 
     private void addEncodedSalt(User user) {
         String salt = generateUUID();
@@ -49,23 +45,21 @@ public class SecurityService {
         userService.saveUser(user);
     }
 
-    public void setUserToken(HttpServletRequest request, HttpServletResponse response, Session session) {
-
-        User user = userMapper(request).orElseThrow();
-        session.setUser(user);
-
-        Cookie[] cookies = request.getCookies();
+    public Session setUserToken(String username, Cookie[] cookies) {
+        Optional<User> optionalUser = userService.findUserByName(username);
+        if (optionalUser.isPresent()) {
+            session.setUser(optionalUser.orElseThrow());
+        }
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("user-token")) {
                 session.setToken((cookie.getValue()));
-            } else {
-                cookie = new Cookie("user-token", generateUUID());
-                cookie.setMaxAge(300);
-                session.getUser().setAuth(true);
-                session.setToken(cookie.getValue());
-                response.addCookie(cookie);
             }
+            cookie = new Cookie("user-token", generateUUID());
+            cookie.setMaxAge(300);
+            session.getUser().setAuth(true);
+            session.setToken(cookie.getValue());
         }
+        return session;
     }
 
     public static String generateUUID() {
@@ -73,8 +67,9 @@ public class SecurityService {
     }
 
     public void checkUser(HttpServletRequest request) {
-        HttpSession sessionStorage = request.getSession();
-
-        request.getParameter("");
+        HttpSession session = request.getSession();
+        Object username = session.getAttribute("username");
+//        request.getParameter("");
+        System.out.println(username);
     }
 }

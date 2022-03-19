@@ -19,7 +19,7 @@ public class JdbcUserTemplate {
 
     private final Logger logger = Logger.getLogger(JdbcUserTemplate.class.getName());
 
-    public Optional<User> findUserByNameQuery(Long id, String sql) {
+    public Optional<User> findUserByIdQuery(Long id, String sql) {
         Optional<User> user = Optional.empty();
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -48,6 +48,22 @@ public class JdbcUserTemplate {
             return preparedStatement.execute();
         } catch (SQLException exception) {
             throw new RuntimeException(exception.getMessage(), exception);
+        }
+    }
+
+    public Optional<User> findUserByNameQuery(String username, String sql) {
+        Optional<User> user = Optional.empty();
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            logger.info(String.valueOf(preparedStatement));
+            while (resultSet.next()) {
+                user = ROW_USER_MAPPER.userMapper(resultSet);
+            }
+            return user;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
     }
 }

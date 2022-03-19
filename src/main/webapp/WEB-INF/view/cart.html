@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../resources/css/styles.css">
     <title>Cart</title>
@@ -32,7 +33,7 @@
             <td><input style="border: none;" type="text" onclick="" name="name" id="name" value="${cartItem.name}"/></td>
             <td><input style="border: none;" type="text" onclick="" name="description" id="description" value="${cartItem.description}"/></td>
             <td><input style="border: none;" type="text" onclick="" name="price" id="price" value="${cartItem.price?string.computer}"/></td>
-            <td><button type="button" onclick="remove(${cartItem.id})" class="btn btn-outline-danger">Delete</button></td>
+            <td><button type="button" onclick="bucket(${product.id})" class="btn btn-outline-success"><span><i class="fa fa-cart-arrow-down"></i></span></button></td>
             <td><input style="border: none;" type="text" id="created" name="created"
                        value="${cartItem.created?datetime.iso?string('dd.MM.yy HH:mm:ss')}"/></td>
         </form>
@@ -40,4 +41,8 @@
 </#list>
 </table>
 </body>
+<script>
+    function bucket(id) {
+    fetch('/products/cart?id=' + id, {method: 'POST'}).then(result => console.log(result));
+}</script>
 </html>

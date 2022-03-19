@@ -7,14 +7,11 @@ import org.store.web.entity.Session;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
 
 @AllArgsConstructor
 public class SecurityFilter implements Filter {
-
     private final SecurityService securityService;
     private Session session;
 
@@ -27,12 +24,16 @@ public class SecurityFilter implements Filter {
         List<String> allow = List.of("/products", "/static");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        session = (Session) request.getSession();
-        System.out.println(session);
+        String sessionToken = session.getToken();
+        System.out.println(session.getProductList());
+        System.out.println(sessionToken);
+        System.out.println(session.getUser().isAuth());
 
-        boolean isAuth = session.getUser().isAuth();
-        System.out.println(isAuth);
-        if (isAuth) {
+
+//        boolean isAuth = session.getUser().isAuth();
+
+
+        if (true) {
             for (String path : allow) {
                 if (request.getRequestURI().startsWith(path)) {
                     filterChain.doFilter(servletRequest, servletResponse);
@@ -40,6 +41,7 @@ public class SecurityFilter implements Filter {
             }
         } else redirect(response);
     }
+
     private void redirect(HttpServletResponse response) {
         try {
             response.sendRedirect("/login");

@@ -9,4 +9,6 @@ public interface UserDao {
     Optional<User> findUserById(Long id);
 
     boolean saveUser(User user);
+
+    Optional<User> findUserByName(String username);
 }

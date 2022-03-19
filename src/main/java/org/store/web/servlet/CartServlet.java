@@ -24,8 +24,9 @@ public class CartServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-
+//        Session session = (Session) request.getSession();
         List<Product> products = session.getProductList();
+
         Map<String, List<Product>> model = new HashMap<>();
         model.put("cartItem", products);
         try {

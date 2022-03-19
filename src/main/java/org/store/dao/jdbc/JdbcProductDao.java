@@ -37,7 +37,7 @@ public class JdbcProductDao implements ProductDao {
     @Override
     public Optional<Product> findById(Long id) {
         return jdbcProductTemplate
-                .findProductByQuery(id, SELECT_PRODUCT_BY_ID_SQL);
+                .findProductByIdQuery(id, SELECT_PRODUCT_BY_ID_SQL);
     }
 
     public List<Product> findByIds(List<Long> ids) {

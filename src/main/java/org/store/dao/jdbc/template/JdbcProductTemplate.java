@@ -71,7 +71,7 @@ public class JdbcProductTemplate {
         }
     }
 
-    public Optional<Product> findProductByQuery(Long id, String sql) {
+    public Optional<Product> findProductByIdQuery(Long id, String sql) {
         Optional<Product> product = Optional.empty();
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -86,4 +86,6 @@ public class JdbcProductTemplate {
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
     }
+
+
 }

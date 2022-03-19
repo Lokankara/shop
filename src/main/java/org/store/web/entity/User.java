@@ -15,6 +15,7 @@ public class User {
     private Long user_id;
     private String username;
     private String password;
+    private String email;
     private String salt;
     private String role;
     private boolean auth;
