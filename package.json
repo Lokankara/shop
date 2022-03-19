@@ -1,5 +1,7 @@
 {
   "scripts": {
-    "start": "npm run"
+    "dev": "mvn clean package -X",
+  "start": "npm run dev",
+  "build": "node build/build. js"
   }
 }

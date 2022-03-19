@@ -48,7 +48,7 @@
           <appName>${heroku.appName}</appName>
           <jdkVersion>${maven.compiler.source}</jdkVersion>
           <processTypes>
-            <web>java $JAVA_OPTS -Dport=$PORT -jar target/shop-jar-with-dependencies.jar</web>
+            <web>java $JAVA_OPTS -Dport=$PORT -jar target/shop.jar</web>
           </processTypes>
         </configuration>
       </plugin>
@@ -139,7 +139,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <flyway.user>user</flyway.user>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <heroku.appName>shop</heroku.appName>
+    <heroku.appName>murmuring-wave-33617</heroku.appName>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <flyway.password>password</flyway.password>
   </properties>
