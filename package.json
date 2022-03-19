@@ -1,5 +1,7 @@
 {
   "scripts": {
-    "start": "npm run"
+    "dev": "mvn clean package -X",
+  "start": "mvn jetty:run",
+  "build": "java -jar target/dependency/webapp-runner.jar target/*.war"
   }
 }

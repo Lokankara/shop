@@ -51,11 +51,12 @@ public class JdbcUserTemplate {
         }
     }
 
-    public Optional<User> findUserByNameQuery(String username, String sql) {
+    public Optional<User> findUserByQuery(String username, String password, String sql) {
         Optional<User> user = Optional.empty();
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
             logger.info(String.valueOf(preparedStatement));
             while (resultSet.next()) {

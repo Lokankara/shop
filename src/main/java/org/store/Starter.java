@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
 import org.store.dao.ProductDao;
 import org.store.dao.jdbc.JdbcProductDao;
 import org.store.dao.jdbc.JdbcUserDao;
@@ -23,10 +24,11 @@ import java.util.EnumSet;
 import java.util.Properties;
 
 public class Starter {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
 
         Properties properties = new PropertiesReader("application.properties").getProps();
         ConnectionFactory connectionFactory = new ConnectionFactory(properties);
+
         JdbcProductTemplate jdbcProductTemplate = new JdbcProductTemplate(connectionFactory);
         JdbcUserTemplate jdbcUserTemplate = new JdbcUserTemplate(connectionFactory);
         Session session = new Session();
@@ -41,7 +43,7 @@ public class Starter {
         ServletContextHandler contextHandler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.addServlet(new ServletHolder(new StaticServlet()), "/static/*");
-        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
+//        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
         contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/add");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/remove");
@@ -51,6 +53,10 @@ public class Starter {
 
         Server server = new Server(8080);
         server.setHandler(contextHandler);
-        server.start();
+        try {
+            server.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

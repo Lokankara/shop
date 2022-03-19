@@ -19,6 +19,6 @@ script:
   - sudo docker images
   - sudo docker run -8080:8080 java-docker
   - sudo docker-machine ls	
-  - curl --request GET --url https://web-food-shop.herokuapp.com/ --header 'content-type: application/json'
+  - curl --request GET --url https://murmuring-wave-33617.herokuapp.com/ --header 'content-type: application/json'
 
-after_success: bash <(curl -s https://web-food-shop.herokuapp.com/)
+after_success: bash <(curl -s https:/murmuring-wave-33617.herokuapp.com/)

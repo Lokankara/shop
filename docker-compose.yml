@@ -1,0 +1,30 @@
+version: '2.1'
+
+services:
+  nginx:
+    image: nginx
+    ports:
+        - "883:80"
+    depends_on:
+      tomcat:
+        condition: service_healthy
+    volumes:
+       - ./html:/opt/app
+
+  redis:
+    image: redis
+    ports:
+      - "9200:9200"
+
+  postgres:
+    image: portgres
+    ports:
+      - "5432:5432"
+
+  tomcat:
+    build: ./
+    ports:
+      - "8080:8080"
+    links:
+      - postgres
+      - redis

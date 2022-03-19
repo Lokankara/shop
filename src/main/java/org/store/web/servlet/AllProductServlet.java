@@ -5,6 +5,7 @@ import org.store.service.ProductService;
 import org.store.web.entity.Product;
 import org.store.web.utils.PageGenerator;
 
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

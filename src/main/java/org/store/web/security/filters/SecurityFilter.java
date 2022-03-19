@@ -3,8 +3,10 @@ package org.store.web.security.filters;
 import lombok.AllArgsConstructor;
 import org.store.service.SecurityService;
 import org.store.web.entity.Session;
+import org.store.web.entity.User;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,6 +19,9 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
+        String defaultValue;
+        if (( defaultValue= filterConfig.getInitParameter("shop")) == null)
+            defaultValue = "online-shop";
     }
 
     @Override
@@ -24,13 +29,9 @@ public class SecurityFilter implements Filter {
         List<String> allow = List.of("/products", "/static");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String sessionToken = session.getToken();
-        System.out.println(session.getProductList());
-        System.out.println(sessionToken);
-        System.out.println(session.getUser().isAuth());
-
-
-//        boolean isAuth = session.getUser().isAuth();
+        Cookie[] cookies = request.getCookies();
+        securityService.checkUserToken(session, cookies);
+        System.out.println("session.getProductList "+ session.getProductList());
 
 
         if (true) {

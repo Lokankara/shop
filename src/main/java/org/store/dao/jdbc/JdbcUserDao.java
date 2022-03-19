@@ -9,7 +9,7 @@ import java.util.Optional;
 public class JdbcUserDao implements UserDao {
 
     private static final String SELECT_BY_ID_SQL = "SELECT username, password, salt, auth FROM users WHERE id=?;";
-    private static final String SELECT_BY_USERNAME_SQL = "SELECT username, password, salt, auth FROM users WHERE username=?;";
+    private static final String SELECT_BY_USER_SQL = "SELECT username, password, salt, role, auth  FROM users WHERE username=? AND password=?;";
     private static final String INSERT_USER_SQL = "INSERT INTO users (username, password, salt, role, auth, created) VALUES (?, ?, ?, ?, ?, ?);";
 
     private final JdbcUserTemplate jdbcUserTemplate;
@@ -30,8 +30,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public Optional<User> findUserByName(String username) {
-        return jdbcUserTemplate.findUserByNameQuery(
-            username, SELECT_BY_USERNAME_SQL);
+    public Optional<User> findUserBy(User user) {
+        return jdbcUserTemplate.findUserByQuery(
+            user.getUsername(), user.getPassword(),
+                SELECT_BY_USER_SQL);
     }
 }

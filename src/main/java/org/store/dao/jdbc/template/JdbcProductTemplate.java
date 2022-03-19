@@ -77,7 +77,7 @@ public class JdbcProductTemplate {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            logger.info(String.valueOf(preparedStatement));
+                     logger.info(String.valueOf(preparedStatement));
             while (resultSet.next()) {
                 product = ROW_PRODUCT_MAPPER.productMapper(resultSet);
             }

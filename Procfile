@@ -1,1 +1,1 @@
-java $JAVA_OPTS -Dport=$PORT -jar target/shop-jar-with-dependencies.jar
+java -jar webapp-runner.jar shop.war

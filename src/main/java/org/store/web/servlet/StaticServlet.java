@@ -13,7 +13,7 @@ public class StaticServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
         System.out.println(path);
-        request.getRequestDispatcher("/css/styles.css/**").forward(request, response);
+        request.getRequestDispatcher("/resource/css/styles.css/**").forward(request, response);
         RequestDispatcher requestDispatcher = getServletContext().getNamedDispatcher("default");
         HttpServletRequest wrapped = new HttpServletRequestWrapper(request) {
             public String getServletPath() {

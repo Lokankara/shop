@@ -6,5 +6,5 @@ CMD ["nginx","-g","daemon off;"]
 
 FROM tomcat:8-jre11
 RUN echo "export JAVA_OPTS=\"-Dapp.env=staging\"" > /usr/local/tomcat/bin/setenv.sh
-COPY shop-1.0-SNAPSHOT.jar /usr/local/tomcat/webapps/app.jar
+COPY shop-1.0-SNAPSHOT.jar /usr/local/tomcat/webapps/products.war
 CMD ["catalina.sh", "run"]

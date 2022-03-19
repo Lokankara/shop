@@ -1,17 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://java.sun.com/xml/ns/javaee"
-        xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-        id="WebApp_ID" version="2.5">
+<?xml version="1.0" encoding="utf-8" ?>
+<web-app>
+    <init-param>
+        <description>web-shop</description>
+        <param-name>shop</param-name>
+        <param-value>webStore</param-value>
+    </init-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/web.xml</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>shop</servlet-name>
+        <servlet-class>org.store.web.servlet.AllProductServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-    <filter>
-        <filter-name>securityFilter</filter-name>
-        <filter-class>org.store.web.security.filters.SecurityFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>securityFilter</filter-name>
+    <servlet-mapping>
+        <servlet-name>shop</servlet-name>
+        <url-pattern>/products</url-pattern>
+
+        <servlet-name>user</servlet-name>
         <url-pattern>/products/*</url-pattern>
-    </filter-mapping>
+    </servlet-mapping>
+        <filter>
+            <filter-name>securityFilter</filter-name>
+            <filter-class>org.store.web.security.filters.SecurityFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>securityFilter</filter-name>
+            <url-pattern>/products/*</url-pattern>
+        </filter-mapping>
 </web-app>

@@ -9,7 +9,7 @@ import java.util.Map;
 @Setter
 @Getter
 public class Session {
-
+    private String session_id;
     private String token;
     private boolean expired;
     private User user;
