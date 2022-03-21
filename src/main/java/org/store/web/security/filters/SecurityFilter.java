@@ -3,7 +3,6 @@ package org.store.web.security.filters;
 import lombok.AllArgsConstructor;
 import org.store.service.SecurityService;
 import org.store.web.entity.Session;
-import org.store.web.entity.User;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -21,12 +20,12 @@ public class SecurityFilter implements Filter {
     public void init(FilterConfig filterConfig) {
         String defaultValue;
         if (( defaultValue= filterConfig.getInitParameter("shop")) == null)
-            defaultValue = "online-shop";
+        {defaultValue = "online-shop";}
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        List<String> allow = List.of("/products", "/static");
+        List<String> allow = List.of("/products", "/static", "/login");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         Cookie[] cookies = request.getCookies();

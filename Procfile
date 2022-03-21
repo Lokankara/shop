@@ -1,1 +1,1 @@
-java -jar webapp-runner.jar shop.war
+web: java -jar target/dependency/webapp-runner.jar target/*.war

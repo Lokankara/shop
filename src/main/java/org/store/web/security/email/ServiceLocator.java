@@ -1,7 +1,11 @@
 package org.store.web.security.email;
 
+import org.postgresql.ds.PGSimpleDataSource;
+import org.store.web.utils.PropertiesReader;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.util.Properties;
 
 public class ServiceLocator {
 
@@ -9,15 +13,29 @@ public class ServiceLocator {
 
     public static MessagingService getService(String serviceName) throws NamingException {
 
-        MessagingService service = cache.getService(serviceName);
+        MessagingService messagingService = cache.getService(serviceName);
 
-        if (service != null) {
-            return service;
+        if (messagingService != null) {
+            return messagingService;
         }
 
         InitialContext context = new InitialContext();
-        MessagingService service2 = (MessagingService) context.lookup(serviceName);
-        cache.addService(service2);
-        return service2;
+        MessagingService service = (MessagingService) context.lookup(serviceName);
+        cache.addService(service);
+        return service;
+    }
+
+    public static PGSimpleDataSource dataSource() {
+        PropertiesReader properties = new PropertiesReader("application.properties");
+        Properties props = properties.getProps();
+        String url = props.getProperty("db.url");
+        String username = props.getProperty("db.username");
+        String password = props.getProperty("db.password");
+
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+        dataSource.setURL(url);
+        dataSource.setUser(username);
+        dataSource.setPassword(password);
+        return dataSource;
     }
 }

@@ -6,7 +6,6 @@ import org.store.web.entity.Session;
 import org.store.web.entity.User;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -47,8 +46,10 @@ public class SecurityService {
 
     public Session checkUserToken(Session session, Cookie[] cookies) {
         User user = session.getUser();
-        if (user.getUsername()== null){user.setUsername("guest");}
-        Optional<User> optionalUser = userService.findUser(user);
+        if (user.getUsername() == null) {
+            user.setUsername("guest");
+        }
+        Optional<User> optionalUser = userService.findUserByName(user.getUsername());
         if (optionalUser.isPresent()) {
             session.setUser(optionalUser.orElseThrow());
         }
@@ -70,8 +71,8 @@ public class SecurityService {
 
 
     public void setSession(User user, HttpSession sessionStorage) {
-        Optional<User> optionalUser = userService.findUser(user);
-        if(optionalUser.isPresent()){
+        Optional<User> optionalUser = userService.findUserByName(user.getUsername());
+        if (optionalUser.isPresent()) {
             session.setUser(optionalUser.get());
             sessionStorage.setAttribute("session", session);
         }

@@ -1,7 +1,8 @@
 package org.store.dao.jdbc.template;
 
+import lombok.AllArgsConstructor;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.store.dao.jdbc.mapper.UserMapper;
-import org.store.dao.jdbc.utils.ConnectionFactory;
 import org.store.web.entity.User;
 
 import java.sql.*;
@@ -9,19 +10,18 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-public class JdbcUserTemplate {
-    private final ConnectionFactory connectionFactory;
+@AllArgsConstructor
+public class JdbcUserTemplate implements AutoCloseable {
     private final UserMapper ROW_USER_MAPPER = new UserMapper();
+    private final PGSimpleDataSource dataSource = new PGSimpleDataSource();
 
-    public JdbcUserTemplate(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
 
     private final Logger logger = Logger.getLogger(JdbcUserTemplate.class.getName());
 
+
     public Optional<User> findUserByIdQuery(Long id, String sql) {
         Optional<User> user = Optional.empty();
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -36,7 +36,7 @@ public class JdbcUserTemplate {
     }
 
     public boolean setUserQuery(User user, String sql) {
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
@@ -51,12 +51,11 @@ public class JdbcUserTemplate {
         }
     }
 
-    public Optional<User> findUserByQuery(String username, String password, String sql) {
+    public Optional<User> findUserByQuery(String username, String sql) {
         Optional<User> user = Optional.empty();
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
             logger.info(String.valueOf(preparedStatement));
             while (resultSet.next()) {
@@ -66,5 +65,9 @@ public class JdbcUserTemplate {
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException.getMessage(), sqlException);
         }
+    }
+
+    @Override
+    public void close() {
     }
 }

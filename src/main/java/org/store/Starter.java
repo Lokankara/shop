@@ -5,6 +5,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import org.postgresql.ds.PGSimpleDataSource;
 import org.store.dao.ProductDao;
 import org.store.dao.jdbc.JdbcProductDao;
 import org.store.dao.jdbc.JdbcUserDao;
@@ -27,10 +28,14 @@ public class Starter {
     public static void main(String[] args)  {
 
         Properties properties = new PropertiesReader("application.properties").getProps();
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+        dataSource.setURL(properties.getProperty("db.url"));
+        dataSource.setUser(properties.getProperty("db.username"));
+        dataSource.setPassword(properties.getProperty("db.password"));
         ConnectionFactory connectionFactory = new ConnectionFactory(properties);
 
         JdbcProductTemplate jdbcProductTemplate = new JdbcProductTemplate(connectionFactory);
-        JdbcUserTemplate jdbcUserTemplate = new JdbcUserTemplate(connectionFactory);
+        JdbcUserTemplate jdbcUserTemplate = new JdbcUserTemplate();
         Session session = new Session();
 
         ProductDao productDao = new JdbcProductDao(jdbcProductTemplate);
@@ -44,7 +49,7 @@ public class Starter {
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.addServlet(new ServletHolder(new StaticServlet()), "/static/*");
 //        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
-        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
+//        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/add");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/remove");
         contextHandler.addServlet(new ServletHolder(new CartServlet(productService, session)), "/products/cart/*");
