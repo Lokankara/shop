@@ -35,7 +35,7 @@ public class Starter {
         ConnectionFactory connectionFactory = new ConnectionFactory(properties);
 
         JdbcProductTemplate jdbcProductTemplate = new JdbcProductTemplate(connectionFactory);
-        JdbcUserTemplate jdbcUserTemplate = new JdbcUserTemplate();
+        JdbcUserTemplate jdbcUserTemplate = new JdbcUserTemplate(dataSource);
         Session session = new Session();
 
         ProductDao productDao = new JdbcProductDao(jdbcProductTemplate);
@@ -49,7 +49,7 @@ public class Starter {
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.addServlet(new ServletHolder(new StaticServlet()), "/static/*");
 //        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/");
-//        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
+        contextHandler.addServlet(new ServletHolder(new AllProductServlet(productService)), "/products");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/add");
         contextHandler.addServlet(new ServletHolder(new ProductServlet(productService)), "/products/remove");
         contextHandler.addServlet(new ServletHolder(new CartServlet(productService, session)), "/products/cart/*");

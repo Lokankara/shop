@@ -11,6 +11,19 @@
         <constructor-arg ref="userDao"/>
     </bean>
 
-    <bean id="userDao" class="org.store.dao.jdbc.JdbcUserDao"/>
+    <bean id="userDao" class="org.store.dao.jdbc.JdbcUserDao">
+        <constructor-arg ref="jdbcUserTemplate"/>
+    </bean>
 
+    <bean id="jdbcUserTemplate" class="org.store.dao.jdbc.template.JdbcUserTemplate"/>
+
+    <bean id="productService" class="org.store.service.ProductService">
+        <constructor-arg ref="productDao"/>
+    </bean>
+
+    <bean id="productDao" class="org.store.dao.jdbc.JdbcProductDao">
+        <constructor-arg ref="jdbcProductTemplate"/>
+    </bean>
+
+    <bean id="jdbcProductTemplate" class="org.store.dao.jdbc.template.JdbcProductTemplate"/>
 </beans>

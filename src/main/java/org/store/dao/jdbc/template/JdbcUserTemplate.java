@@ -13,8 +13,7 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class JdbcUserTemplate implements AutoCloseable {
     private final UserMapper ROW_USER_MAPPER = new UserMapper();
-    private final PGSimpleDataSource dataSource = new PGSimpleDataSource();
-
+    private final PGSimpleDataSource dataSource;
 
     private final Logger logger = Logger.getLogger(JdbcUserTemplate.class.getName());
 

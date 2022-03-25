@@ -18,9 +18,7 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        String defaultValue;
-        if (( defaultValue= filterConfig.getInitParameter("shop")) == null)
-        {defaultValue = "online-shop";}
+        System.out.println("doFilter");
     }
 
     @Override
@@ -29,17 +27,19 @@ public class SecurityFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            System.out.println(cookie.getValue());
+        }
+
+        System.out.println("session.getProductList " + session.getProductList());
         securityService.checkUserToken(session, cookies);
-        System.out.println("session.getProductList "+ session.getProductList());
 
-
-        if (true) {
-            for (String path : allow) {
-                if (request.getRequestURI().startsWith(path)) {
-                    filterChain.doFilter(servletRequest, servletResponse);
-                }
+        for (String path : allow) {
+            if (request.getRequestURI().startsWith(path)) {
+                filterChain.doFilter(servletRequest, servletResponse);
             }
-        } else redirect(response);
+        }
+        redirect(response);
     }
 
     private void redirect(HttpServletResponse response) {

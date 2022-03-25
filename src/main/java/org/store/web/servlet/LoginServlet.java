@@ -8,6 +8,7 @@ import org.store.web.utils.PageGenerator;
 
 import javax.servlet.http.*;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.store.web.utils.WebUtils.userMapper;
 
@@ -27,7 +28,7 @@ public class LoginServlet extends HttpServlet {
     @SneakyThrows
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        User user = userMapper(request).orElseThrow();
+        Optional<User> user = userMapper(request);
         HttpSession sessionStorage = request.getSession();
         securityService.setSession(user, sessionStorage);
 //        sessionStorage.setAttribute("session", session);

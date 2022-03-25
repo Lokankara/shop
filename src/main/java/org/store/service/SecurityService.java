@@ -46,8 +46,10 @@ public class SecurityService {
 
     public Session checkUserToken(Session session, Cookie[] cookies) {
         User user = session.getUser();
-        if (user.getUsername() == null) {
-            user.setUsername("guest");
+        if (user == null) {
+            user = new User();
+            session.setUser(user);
+            return session;
         }
         Optional<User> optionalUser = userService.findUserByName(user.getUsername());
         if (optionalUser.isPresent()) {
@@ -69,12 +71,15 @@ public class SecurityService {
         return UUID.randomUUID().toString();
     }
 
-
-    public void setSession(User user, HttpSession sessionStorage) {
-        Optional<User> optionalUser = userService.findUserByName(user.getUsername());
-        if (optionalUser.isPresent()) {
-            session.setUser(optionalUser.get());
-            sessionStorage.setAttribute("session", session);
+    public void setSession(Optional<User> user, HttpSession sessionStorage) {
+        if (user.isEmpty()) {
+            session.setUser(new User());
+        } else {
+            Optional<User> optionalUser = userService.findUserByName(user.get().getUsername());
+            if (optionalUser.isPresent()) {
+                session.setUser(optionalUser.get());
+                sessionStorage.setAttribute("session", session);
+            }
         }
     }
 }
