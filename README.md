@@ -22,27 +22,3 @@ architecture 3-layer MVC => UML
 - [Add Flyway]()
 
 // locator setAtr(session);
-
-// db dump
-// register -> login, password -> register(login, password) ->
-//					String salt = UUID.getUuid().toString();
-// 					hashedPassword = MD5(password + salt) ->
-// 					save(new User(login, hashedPassword, salt))
-
-// login -> login, password -> login(login, password) -> User user = findByLogin(login);
-//  -> MD5(password + user.getSalt()).equals(user.getPassword()) -> generate token
-
-// without salt
-// value   |  MD5       | SHA256
-// hello   | md5(hello) | sha256(hello)
-// select * from rainbowTable where md5 == password or sha256 == password or ...
-
-// static salt
-// login1, hash1 -> 1234
-// hash2 -> 757
-// hash3 ->
-// most popular 12345 -   login1 12345 -> fail.
-// 2 most popular qwerty - login1 qwerty -> success
-
-// dynamic salt
-// login hashedSaltedPassword salt

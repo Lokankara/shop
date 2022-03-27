@@ -1,18 +1,22 @@
 package org.store.web.servlet;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.store.service.SecurityService;
 import org.store.web.entity.User;
 import org.store.web.utils.PageGenerator;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Optional;
 
 import static org.store.web.utils.WebUtils.userMapper;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginServlet extends HttpServlet {
 
     private final SecurityService securityService;

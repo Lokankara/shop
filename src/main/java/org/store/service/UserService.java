@@ -1,11 +1,13 @@
 package org.store.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.store.dao.UserDao;
 import org.store.web.entity.User;
 
 import java.util.Optional;
 
+@Service
 public class UserService {
 
     private final UserDao userDao;

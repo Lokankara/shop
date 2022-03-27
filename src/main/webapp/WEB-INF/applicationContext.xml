@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc
+  https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <mvc:annotation-driven/>
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+
+    <bean id="securityService" class="org.store.service.SecurityService">
+        <constructor-arg ref="userService"/>
+    </bean>
+
+    <bean id="userService" class="org.store.service.UserService">
+        <constructor-arg ref="userDao"/>
+    </bean>
+
+    <bean id="productService" class="org.store.service.ProductService">
+        <constructor-arg ref="productDao"/>
+    </bean>
+
+    <bean id="userDao" class="org.store.dao.jdbc.JdbcUserDao">
+        <constructor-arg ref="jdbcUserTemplate"/>
+    </bean>
+
+    <bean id="productDao" class="org.store.dao.jdbc.JdbcProductDao">
+        <constructor-arg ref="jdbcProductTemplate"/>
+    </bean>
+
+    <bean id="jdbcUserTemplate" class="org.store.dao.jdbc.template.JdbcUserTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean id="jdbcProductTemplate" class="org.store.dao.jdbc.template.JdbcProductTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
+        <property name="url" value="jdbc:postgresql://ec2-18-235-114-62.compute-1.amazonaws.com:5432/dbgo3fr277jh86"/>
+        <property name="user" value="xhhiprtyikbzhv"/>
+        <property name="password" value="7e80cfaecb05a3a2ed082c914d07d5245f12fb7c41f0714047a38096481ae7f8"/>
+    </bean>
+
+</beans>

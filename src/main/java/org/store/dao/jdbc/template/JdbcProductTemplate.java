@@ -1,10 +1,11 @@
 package org.store.dao.jdbc.template;
 
+import lombok.RequiredArgsConstructor;
 import org.store.dao.jdbc.mapper.ProductMapper;
-import org.store.dao.jdbc.utils.ConnectionFactory;
 import org.store.exception.ProductNotFoundException;
 import org.store.web.entity.Product;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,18 +13,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+@RequiredArgsConstructor
 public class JdbcProductTemplate {
-    private final ProductMapper ROW_PRODUCT_MAPPER = new ProductMapper();
-    private final ConnectionFactory connectionFactory;
 
-    public JdbcProductTemplate(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
+    private static final ProductMapper ROW_PRODUCT_MAPPER = new ProductMapper();
+
+    private final DataSource dataSource;
+
 
     Logger logger = Logger.getLogger(JdbcProductTemplate.class.getName());
 
     public List<Product> getProductsQuery(String sql) {
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             List<Product> productList = new ArrayList<>();
@@ -42,7 +43,7 @@ public class JdbcProductTemplate {
     public boolean setProductQuery(Product product, String sql) {
         product.setCreated(LocalDateTime.now());
 
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getDescription());
@@ -61,7 +62,7 @@ public class JdbcProductTemplate {
     }
 
     public boolean deleteProductById(Long id, String sql) {
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             logger.info(String.valueOf(preparedStatement));
@@ -73,11 +74,11 @@ public class JdbcProductTemplate {
 
     public Optional<Product> findProductByIdQuery(Long id, String sql) {
         Optional<Product> product = Optional.empty();
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-                     logger.info(String.valueOf(preparedStatement));
+            logger.info(String.valueOf(preparedStatement));
             while (resultSet.next()) {
                 product = ROW_PRODUCT_MAPPER.productMapper(resultSet);
             }

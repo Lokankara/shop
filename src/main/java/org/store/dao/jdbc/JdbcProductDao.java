@@ -1,5 +1,6 @@
 package org.store.dao.jdbc;
 
+import org.springframework.stereotype.Component;
 import org.store.dao.ProductDao;
 import org.store.dao.jdbc.template.JdbcProductTemplate;
 import org.store.web.entity.Product;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Component
 public class JdbcProductDao implements ProductDao {
 
     private static final String INSERT_PRODUCT_SQL = "INSERT INTO products (name, description, price, created) VALUES (?, ?, ?, ?);";

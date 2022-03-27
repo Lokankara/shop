@@ -1,10 +1,10 @@
 package org.store.web.security.filters;
 
 import lombok.AllArgsConstructor;
-import org.store.service.SecurityService;
 import org.store.web.entity.Session;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.List;
 
 @AllArgsConstructor
+@WebFilter(urlPatterns = {"/*" })
 public class SecurityFilter implements Filter {
-    private final SecurityService securityService;
-    private Session session;
+    private final Session session = new Session();
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -23,7 +23,7 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        List<String> allow = List.of("/products", "/static", "/login");
+        List<String> allow = List.of("/products", "/static", "/login", "/");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         Cookie[] cookies = request.getCookies();
@@ -32,7 +32,7 @@ public class SecurityFilter implements Filter {
         }
 
         System.out.println("session.getProductList " + session.getProductList());
-        securityService.checkUserToken(session, cookies);
+//        securityService.checkUserToken(session, cookies);
 
         for (String path : allow) {
             if (request.getRequestURI().startsWith(path)) {

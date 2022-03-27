@@ -18,13 +18,13 @@ import java.util.Map;
 public class CartServlet extends HttpServlet {
 
     private final ProductService productService;
-    private final Session session;
+    private final Session session = new Session();
 
     private static final String filename = "cart.html";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-//        Session session = (Session) request.getSession();
+        Session session = (Session) request.getSession();
         List<Product> products = session.getProductList();
 
         Map<String, List<Product>> model = new HashMap<>();

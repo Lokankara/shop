@@ -1,22 +1,25 @@
 package org.store.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Service;
+import org.store.exception.UserNotFoundException;
 import org.store.web.entity.Session;
 import org.store.web.entity.User;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-@AllArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class SecurityService {
-    private final UserService userService;
-    private final Session session;
 
+    private final UserService userService;
+
+    private final Session session = new Session();
+    private Map<String, User> tokens = Collections.synchronizedMap(new HashMap<>());
 
     private void addEncodedSalt(User user) {
         String salt = generateUUID();
@@ -25,8 +28,7 @@ public class SecurityService {
         user.setPassword(encoded);
     }
 
-    private String setToken(Long id) {
-        User userFromDb = userService.findUserById(id).orElseThrow();
+    private String setToken(User userFromDb) {
         Map<User, String> userTokens = session.getTokenStorage();
         userTokens.put(userFromDb, generateUUID());
         session.setTokenStorage(userTokens);
@@ -39,31 +41,17 @@ public class SecurityService {
     }
 
     private void register(User user) {
-        setToken(user.getUser_id());
+        setToken(user);
         addEncodedSalt(user);
         userService.saveUser(user);
     }
 
-    public Session checkUserToken(Session session, Cookie[] cookies) {
-        User user = session.getUser();
-        if (user == null) {
-            user = new User();
-            session.setUser(user);
-            return session;
-        }
-        Optional<User> optionalUser = userService.findUserByName(user.getUsername());
-        if (optionalUser.isPresent()) {
-            session.setUser(optionalUser.orElseThrow());
-        }
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("user-token")) {
-                session.setToken((cookie.getValue()));
-            }
-            cookie = new Cookie("user-token", generateUUID());
-            cookie.setMaxAge(300);
-            session.getUser().setAuth(true);
-            session.setToken(cookie.getValue());
-        }
+    public Session setCookieToken(User user) {
+        String token = setToken(user);
+        Cookie cookie = new Cookie(user.getRole() + "-token", token);
+        cookie.setMaxAge(300);
+        session.getUser().setAuth(true);
+        session.setToken(cookie.getValue());
         return session;
     }
 
@@ -81,5 +69,33 @@ public class SecurityService {
                 sessionStorage.setAttribute("session", session);
             }
         }
+    }
+
+    public void login(User user) {
+
+        Optional<User> optionalUser = userService.findUserByName(user.getUsername());
+
+        if (optionalUser.isPresent()) {
+            User userDb = optionalUser.orElseThrow();
+            boolean isValid = isExisted(user, userDb);
+            if (!isValid) {
+                throw new UserNotFoundException("User not valid");
+            }
+            user.setRole(userDb.getRole());
+            setCookieToken(user);
+        } else {
+            throw new UserNotFoundException("User not founded");
+        }
+    }
+
+    private boolean isExisted(User user, User userDb) {
+        boolean isValidUser = userDb.getUsername().equals(user.getUsername());
+        String saltedPassword = encode(user.getPassword(), userDb.getSalt());
+        boolean isValidPassword = userDb.getPassword().equals(saltedPassword);
+        return isValidUser && isValidPassword;
+    }
+
+    public boolean isAuthorization(String token) {
+        return tokens.containsKey(token);
     }
 }

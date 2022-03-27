@@ -1,18 +1,18 @@
 package org.store.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.store.dao.ProductDao;
 import org.store.web.entity.Product;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductDao productDao;
-
-    public ProductService(ProductDao productDao) {
-        this.productDao = productDao;
-    }
 
     public List<Product> findAll() {
         return productDao.findAll();
